@@ -1,4 +1,4 @@
-package br.com.flallaca.consumer;
+package br.com.flallaca.consumer.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;

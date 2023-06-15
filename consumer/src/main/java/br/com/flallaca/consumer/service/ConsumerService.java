@@ -1,17 +1,19 @@
-package br.com.flallaca.consumer;
+package br.com.flallaca.consumer.service;
 
+import br.com.flallaca.consumer.model.ResponseObject;
+import br.com.flallaca.consumer.model.Transaction;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.ParallelFlux;
 import reactor.core.scheduler.Schedulers;
 
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,18 @@ public class ConsumerService {
 //    @Autowired
     private RestTemplate restTemplate;
 
+
+    public List<String> parseMessageRecievedToUrlsList(byte[] urlsBytes) {
+        var in = new ByteArrayInputStream(urlsBytes);
+
+        try {
+            var is = new ObjectInputStream(in);
+            return (List<String>) is.readObject();
+        } catch (Exception ex) {}
+
+        return null;
+    }
+
     public void consume(Integer loopSize) {
 
         for (int x = 0; x < loopSize; x++) {
@@ -31,12 +45,9 @@ public class ConsumerService {
         }
     }
 
-    public void consumeWebflux(Integer loopSize) {
-
-        getEndpointsToExecute(loopSize);
-
+    public void consumeWebflux(List<String> urls) {
         var webClient = WebClient.create();
-        Flux.fromIterable(getEndpointsToExecute(loopSize))
+        Flux.fromIterable(urls)
                 .parallel()
                 .runOn(Schedulers.parallel())
                 .flatMap(url -> webClient.get()
@@ -55,18 +66,4 @@ public class ConsumerService {
 
 //        responseFlux.blockLast();
     }
-
-    private ArrayList<String> getEndpointsToExecute(Integer loopSize) {
-
-        var hosts = new ArrayList<String>();
-
-        for (int x = 0; x < loopSize; x++) {
-
-            var host = "http://localhost:8081/accounts/transactions";
-            hosts.add(host);
-        }
-
-        return hosts;
-    }
-
 }

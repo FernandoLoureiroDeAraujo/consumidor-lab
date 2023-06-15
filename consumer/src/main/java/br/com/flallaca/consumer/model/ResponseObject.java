@@ -1,4 +1,4 @@
-package br.com.flallaca.consumer;
+package br.com.flallaca.consumer.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
