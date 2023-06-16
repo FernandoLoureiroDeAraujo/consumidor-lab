@@ -17,7 +17,7 @@ public class DataEndpointListenerMQ {
     @JmsListener(destination = "${mq.request-queue-name}", containerFactory = "defaultFactory")
     public void receiveMessage(ActiveMQObjectMessage message) {
 
-        log.info("Message recieved: {}", message);
+        log.info("Message received: {}", message);
 
         long startTime = System.currentTimeMillis();
 
