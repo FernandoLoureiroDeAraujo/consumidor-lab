@@ -10,9 +10,15 @@ services:
       - 8080:80
     networks:
       - mynetwork
+    depends_on:
+      - activemq
+      - scheduler-instance1
+      - consumer-instance1
+      - accounts-instance1
+      - accounts-instance2
   activemq:
     image: quay.io/artemiscloud/activemq-artemis-broker:dev.latest
-    expose:
+    ports:
       - 61616:61616
       - 8161:8161
     environment:
@@ -24,26 +30,34 @@ services:
     build: ./scheduler
     networks:
       - mynetwork
+    depends_on:
+      - activemq
     expose:
       - 8081:8081
-#  consumer-instance1:
-#    build: ./consumer
-#    networks:
-#      - mynetwork
-#    expose:
-#      - 8082:8082
-#  accounts-instance1:
-#    build: ./accounts
-#    networks:
-#      - mynetwork
-#    expose:
-#      - 8083:8083
-#  accounts-instance2:
-#    build: ./accounts
-#    networks:
-#      - mynetwork
-#    expose:
-#      - 8083:8083
+  consumer-instance1:
+    build: ./consumer
+    networks:
+      - mynetwork
+    depends_on:
+      - activemq
+    expose:
+      - 8082:8082
+  accounts-instance1:
+    build: ./accounts
+    networks:
+      - mynetwork
+    depends_on:
+      - activemq
+    expose:
+      - 8083:8083
+  accounts-instance2:
+    build: ./accounts
+    networks:
+      - mynetwork
+    depends_on:
+      - activemq
+    expose:
+      - 8083:8083
 
 networks:
   mynetwork:
