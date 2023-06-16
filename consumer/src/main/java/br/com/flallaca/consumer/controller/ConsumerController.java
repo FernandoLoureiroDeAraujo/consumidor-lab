@@ -1,5 +1,6 @@
-package br.com.flallaca.consumer;
+package br.com.flallaca.consumer.controller;
 
+import br.com.flallaca.consumer.service.ConsumerService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,7 @@ public class ConsumerController {
 
         long startTime = System.currentTimeMillis(); // Get current time in milliseconds
 
-        service.consumeWebflux(loopSize);
+//        service.consumeWebflux(loopSize);
 
         long endTime = System.currentTimeMillis(); // Get current time after sleep
         long elapsedMillis = endTime - startTime; // Calculate elapsed time in milliseconds

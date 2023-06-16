@@ -22,6 +22,18 @@ public class ConsumerService {
 //    @Autowired
     private RestTemplate restTemplate;
 
+
+    public List<String> parseMessageRecievedToUrlsList(byte[] urlsBytes) {
+        var in = new ByteArrayInputStream(urlsBytes);
+
+        try {
+            var is = new ObjectInputStream(in);
+            return (List<String>) is.readObject();
+        } catch (Exception ex) {}
+
+        return null;
+    }
+
     private final String ACCOUNTS_TRANSACTION_ENDPOINT = "http://172.17.0.1:8080/accounts/transactions";
 
     public void consume(Integer loopSize) {
@@ -33,12 +45,9 @@ public class ConsumerService {
         }
     }
 
-    public void consumeWebflux(Integer loopSize) {
-
-        getEndpointsToExecute(loopSize);
-
+    public void consumeWebflux(List<String> urls) {
         var webClient = WebClient.create();
-        Flux.fromIterable(getEndpointsToExecute(loopSize))
+        Flux.fromIterable(urls)
                 .parallel()
                 .runOn(Schedulers.parallel())
                 .flatMap(url -> webClient.get()
@@ -57,16 +66,4 @@ public class ConsumerService {
 
 //        responseFlux.blockLast();
     }
-
-    private ArrayList<String> getEndpointsToExecute(Integer loopSize) {
-
-        var hosts = new ArrayList<String>();
-
-        for (int x = 0; x < loopSize; x++) {
-            hosts.add(ACCOUNTS_TRANSACTION_ENDPOINT);
-        }
-
-        return hosts;
-    }
-
 }
