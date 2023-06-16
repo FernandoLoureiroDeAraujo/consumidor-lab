@@ -13,8 +13,10 @@ public class ConsumerController {
     @Autowired
     private ConsumerService service;
 
-    @GetMapping("consume")
+    @GetMapping("consume/accounts/transactions")
     public void consume(@RequestParam(name = "loop-size", defaultValue = "10", required = false) Integer loopSize) {
+
+        log.info("Starting request");
 
         long startTime = System.currentTimeMillis(); // Get current time in milliseconds
 
@@ -25,5 +27,6 @@ public class ConsumerController {
         long elapsedSeconds = elapsedMillis / 1000; // Convert elapsed time to seconds
 
         log.info("Elapsed time: " + elapsedSeconds + " seconds.");
+        log.info("Ending request");
     }
 }

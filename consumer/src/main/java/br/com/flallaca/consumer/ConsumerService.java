@@ -22,10 +22,12 @@ public class ConsumerService {
 //    @Autowired
     private RestTemplate restTemplate;
 
+    private final String ACCOUNTS_TRANSACTION_ENDPOINT = "http://172.17.0.1:8080/accounts/transactions";
+
     public void consume(Integer loopSize) {
 
         for (int x = 0; x < loopSize; x++) {
-            var response = restTemplate.getForObject("http://localhost:8081/accounts/transactions", ResponseObject.class);
+            var response = restTemplate.getForObject(ACCOUNTS_TRANSACTION_ENDPOINT, ResponseObject.class);
 
             log.info(((List<Transaction>) response.getData()).toString());
         }
@@ -61,9 +63,7 @@ public class ConsumerService {
         var hosts = new ArrayList<String>();
 
         for (int x = 0; x < loopSize; x++) {
-
-            var host = "http://localhost:8081/accounts/transactions";
-            hosts.add(host);
+            hosts.add(ACCOUNTS_TRANSACTION_ENDPOINT);
         }
 
         return hosts;
