@@ -15,7 +15,9 @@ public class ActiveMQService {
     private JmsTemplate jmsTemplate;
 
     public void sendMessage(String queueName, List<String> urls) {
+
         jmsTemplate.convertAndSend(queueName, urls);
+
         log.info("Sent to queue {} the message: {}", queueName, urls);
     }
 }

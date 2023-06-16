@@ -3,6 +3,7 @@ package br.com.flallaca.consumer.service;
 import br.com.flallaca.consumer.model.ResponseObject;
 import br.com.flallaca.consumer.model.Transaction;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -18,32 +19,24 @@ import java.util.List;
 @Service
 public class ConsumerService {
 
-    private final String ACCOUNTS_TRANSACTION_ENDPOINT = "http://172.17.0.1:8080/accounts/transactions";
+    @Value("${application.request.url.accounts}")
+    private String accountTransactionRequestUrl;
 
 //    @Autowired
     private RestTemplate restTemplate;
 
-    public List<String> parseMessageRecievedToUrlsList(byte[] urlsBytes) {
-        var in = new ByteArrayInputStream(urlsBytes);
-
-        try {
-            var is = new ObjectInputStream(in);
-            return (List<String>) is.readObject();
-        } catch (Exception ex) {}
-
-        return null;
-    }
 
     public void consume(Integer loopSize) {
 
         for (int x = 0; x < loopSize; x++) {
-            var response = restTemplate.getForObject(ACCOUNTS_TRANSACTION_ENDPOINT, ResponseObject.class);
+            var response = restTemplate.getForObject(accountTransactionRequestUrl, ResponseObject.class);
 
             log.info(((List<Transaction>) response.getData()).toString());
         }
     }
 
     public void consumeWebflux(List<String> urls) {
+
         var webClient = WebClient.create();
         Flux.fromIterable(urls)
                 .parallel()
@@ -61,7 +54,17 @@ public class ConsumerService {
                         })
                 ).sequential()
                 .blockLast();
+    }
 
-//        responseFlux.blockLast();
+    public List<String> parseMessageReceivedToUrlsList(byte[] urlsBytes) {
+
+        var in = new ByteArrayInputStream(urlsBytes);
+
+        try {
+            var is = new ObjectInputStream(in);
+            return (List<String>) is.readObject();
+        } catch (Exception ex) {}
+
+        return null;
     }
 }

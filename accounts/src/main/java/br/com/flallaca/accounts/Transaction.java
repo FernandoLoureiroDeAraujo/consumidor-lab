@@ -63,6 +63,7 @@ public class Transaction {
     private String completedAuthorisedPaymentType;
 
     public Transaction createTransaction(Faker faker, TransactionAmount transactionAmount) {
+
         this.setTransactionId(faker.idNumber().valid());
         this.setPartieBranchCode(faker.random().hex(4));
         this.setPartieCompeCode(faker.random().hex(3));
@@ -76,6 +77,7 @@ public class Transaction {
         this.setPartiePersonType(faker.random().hex());
         this.setCompletedAuthorisedPaymentType(faker.random().hex());
         this.setTransactionAmount(transactionAmount);
+
         return this;
     }
 }

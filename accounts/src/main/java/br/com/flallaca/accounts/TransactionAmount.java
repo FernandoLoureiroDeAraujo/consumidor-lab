@@ -21,8 +21,10 @@ public class TransactionAmount {
     private Object currency;
 
     public TransactionAmount createTransactionAmount(Faker faker) {
+
         this.setAmount(faker.number().digits(4));
         this.setCurrency(faker.currency().code());
+
         return this;
     }
 }

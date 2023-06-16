@@ -34,6 +34,9 @@ services:
       - activemq
     expose:
       - 8081:8081
+    environment:
+      REQUEST_URL_CONSUMER: http://172.17.0.1:8080/consume/accounts/transactions
+      MQ_BROKER_URL: tcp://172.17.0.1:61616
   consumer-instance1:
     build: ./consumer
     networks:
@@ -42,6 +45,9 @@ services:
       - activemq
     expose:
       - 8082:8082
+    environment:
+      REQUEST_URL_ACCOUNTS: http://172.17.0.1:8080/accounts/transactions
+      MQ_BROKER_URL: tcp://172.17.0.1:61616
   accounts-instance1:
     build: ./accounts
     networks:

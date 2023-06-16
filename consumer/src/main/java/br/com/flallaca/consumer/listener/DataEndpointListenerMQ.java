@@ -14,13 +14,14 @@ public class DataEndpointListenerMQ {
     @Autowired
     private ConsumerService consumerService;
 
-    @JmsListener(destination = "${mq.queue-name}", containerFactory = "defaultFactory")
+    @JmsListener(destination = "${mq.request-queue-name}", containerFactory = "defaultFactory")
     public void receiveMessage(ActiveMQObjectMessage message) {
+
         log.info("Message recieved: {}", message);
 
         long startTime = System.currentTimeMillis();
 
-        var urls = consumerService.parseMessageRecievedToUrlsList(message.getContent().getData());
+        var urls = consumerService.parseMessageReceivedToUrlsList(message.getContent().getData());
         consumerService.consumeWebflux(urls);
 
         long endTime = System.currentTimeMillis(); // Get current time after sleep
