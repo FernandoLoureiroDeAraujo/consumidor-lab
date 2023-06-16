@@ -16,7 +16,7 @@ public class SchedulerController {
     @Autowired
     private SchedulerService schedulerService;
 
-    @GetMapping(path = "/send-data")
+    @GetMapping(path = "scheduler/send-data")
     public ResponseEntity<?> sendData(@RequestParam(name = "loop-size", defaultValue = "10", required = false) Integer loopSize) {
         schedulerService.processDatas(loopSize);
         return ResponseEntity.ok().build();

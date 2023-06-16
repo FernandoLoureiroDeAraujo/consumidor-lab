@@ -1,24 +1,6 @@
 version: '3'
 
 services:
-  consumer-instance1:
-    build: ./consumer
-    networks:
-      - mynetwork
-    expose:
-      - 8081:8081
-  accounts-instance1:
-    build: ./accounts
-    networks:
-      - mynetwork
-    expose:
-      - 8082:8082
-  accounts-instance2:
-    build: ./accounts
-    networks:
-      - mynetwork
-    expose:
-      - 8082:8082
   loadbalancer:
     image: nginx
     volumes:
@@ -28,15 +10,40 @@ services:
       - 8080:80
     networks:
       - mynetwork
-#  activemq:
-#    image: rmohr/activemq
-#    ports:
-#      - 61616:61616
-#      - 8161:8161
-#    environment:
-#      ACTIVEMQ_OPTS_MEMORY: "-Xms64M -Xmx256M"
+  activemq:
+    image: quay.io/artemiscloud/activemq-artemis-broker:dev.latest
+    expose:
+      - 61616:61616
+      - 8161:8161
+    environment:
+      AMQ_USER: admin
+      AMQ_PASSWORD: admin
+    networks:
+      - mynetwork
+  scheduler-instance1:
+    build: ./scheduler
+    networks:
+      - mynetwork
+    expose:
+      - 8081:8081
+#  consumer-instance1:
+#    build: ./consumer
 #    networks:
 #      - mynetwork
+#    expose:
+#      - 8082:8082
+#  accounts-instance1:
+#    build: ./accounts
+#    networks:
+#      - mynetwork
+#    expose:
+#      - 8083:8083
+#  accounts-instance2:
+#    build: ./accounts
+#    networks:
+#      - mynetwork
+#    expose:
+#      - 8083:8083
 
 networks:
   mynetwork:

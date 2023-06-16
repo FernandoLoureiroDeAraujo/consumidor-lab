@@ -1,27 +1,27 @@
-package br.com.flallaca.consumer;
+package br.com.flallaca.consumer.service;
 
+import br.com.flallaca.consumer.model.ResponseObject;
+import br.com.flallaca.consumer.model.Transaction;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.ParallelFlux;
 import reactor.core.scheduler.Schedulers;
 
-import java.util.ArrayList;
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
 import java.util.List;
 
 @Log4j2
 @Service
 public class ConsumerService {
 
+    private final String ACCOUNTS_TRANSACTION_ENDPOINT = "http://172.17.0.1:8080/accounts/transactions";
+
 //    @Autowired
     private RestTemplate restTemplate;
-
 
     public List<String> parseMessageRecievedToUrlsList(byte[] urlsBytes) {
         var in = new ByteArrayInputStream(urlsBytes);
@@ -33,8 +33,6 @@ public class ConsumerService {
 
         return null;
     }
-
-    private final String ACCOUNTS_TRANSACTION_ENDPOINT = "http://172.17.0.1:8080/accounts/transactions";
 
     public void consume(Integer loopSize) {
 
