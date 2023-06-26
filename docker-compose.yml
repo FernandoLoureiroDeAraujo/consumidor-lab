@@ -1,13 +1,15 @@
 version: '3'
 
 services:
+
+  # APPLICATIONS LOAD BALANCER
   loadbalancer:
     image: nginx
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
     command: [ nginx-debug, '-g', 'daemon off;' ]
     ports:
-      - 8080:80
+      - "8080:80"
     networks:
       - mynetwork
     depends_on:
@@ -16,54 +18,151 @@ services:
       - consumer-instance1
       - accounts-instance1
       - accounts-instance2
+      - processor-instance1
+
+  # JMS BROKER
   activemq:
     image: quay.io/artemiscloud/activemq-artemis-broker:dev.latest
     ports:
       - 61616:61616
       - 8161:8161
     environment:
-      AMQ_USER: admin
-      AMQ_PASSWORD: admin
+      - AMQ_USER=admin
+      - AMQ_PASSWORD=admin
     networks:
       - mynetwork
-  scheduler-instance1:
-    build: ./scheduler
-    networks:
-      - mynetwork
-    depends_on:
-      - activemq
-    expose:
-      - 8081:8081
-    environment:
-      REQUEST_URL_CONSUMER: http://172.17.0.1:8080/accounts/transactions
-      MQ_BROKER_URL: tcp://172.17.0.1:61616
-  consumer-instance1:
-    build: ./consumer
-    networks:
-      - mynetwork
-    depends_on:
-      - activemq
-    expose:
-      - 8082:8082
-    environment:
-      REQUEST_URL_ACCOUNTS: http://172.17.0.1:8080/accounts/transactions
-      MQ_BROKER_URL: tcp://172.17.0.1:61616
-  accounts-instance1:
-    build: ./accounts
-    networks:
-      - mynetwork
-    depends_on:
-      - activemq
-    expose:
-      - 8083:8083
-  accounts-instance2:
-    build: ./accounts
-    networks:
-      - mynetwork
-    depends_on:
-      - activemq
-    expose:
-      - 8083:8083
 
+  # APPLICATIONS
+  scheduler-instance1:
+    build:
+      context: .
+      dockerfile: scheduler/Dockerfile
+    networks:
+      - mynetwork
+    depends_on:
+      - activemq
+      - jaeger
+    expose:
+      - "8081:8081"
+    environment:
+      - REQUEST_URL_CONSUMER=http://172.17.0.1:8080/accounts/transactions
+      - MQ_BROKER_URL=tcp://172.17.0.1:61616
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://172.17.0.1:4317
+      - OTEL_SERVICE_NAME=scheduler
+  consumer-instance1:
+    build:
+      context: .
+      dockerfile: consumer/Dockerfile
+    networks:
+      - mynetwork
+    depends_on:
+      - activemq
+      - jaeger
+    expose:
+      - "8082:8082"
+    environment:
+      - REQUEST_URL_ACCOUNTS=http://172.17.0.1:8080/accounts/transactions
+      - MQ_BROKER_URL=tcp://172.17.0.1:61616
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://172.17.0.1:4317
+      - OTEL_SERVICE_NAME=consumer
+  accounts-instance1:
+    build:
+      context: .
+      dockerfile: accounts/Dockerfile
+    networks:
+      - mynetwork
+    depends_on:
+      - activemq
+      - jaeger
+    expose:
+      - "8083:8083"
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://172.17.0.1:4317
+      - OTEL_SERVICE_NAME=accounts-instance1
+  accounts-instance2:
+    build:
+      context: .
+      dockerfile: accounts/Dockerfile
+    networks:
+      - mynetwork
+    depends_on:
+      - activemq
+      - jaeger
+    expose:
+      - "8083:8083"
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://172.17.0.1:4317
+      - OTEL_SERVICE_NAME=accounts-instance2
+  processor-instance1:
+    build:
+      context: .
+      dockerfile: processor/Dockerfile
+    networks:
+      - mynetwork
+    depends_on:
+      - activemq
+      - jaeger
+    expose:
+      - "8084:8084"
+    environment:
+      - MQ_BROKER_URL=tcp://172.17.0.1:61616
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://172.17.0.1:4317
+      - OTEL_SERVICE_NAME=processor
+
+  # OBSERVABILITY
+  jaeger:
+    networks:
+      - mynetwork
+    image: jaegertracing/all-in-one:latest
+    volumes:
+      - ./docker/observability/jaeger-ui.json:/etc/jaeger/jaeger-ui.json
+    command: --query.ui-config /etc/jaeger/jaeger-ui.json
+    environment:
+      - LOG_LEVEL=info
+      - METRICS_STORAGE_TYPE=prometheus
+      - PROMETHEUS_SERVER_URL=http://prometheus:9090
+      - PROMETHEUS_QUERY_SUPPORT_SPANMETRICS_CONNECTOR=true
+      - PROMETHEUS_QUERY_NAMESPACE=span_metrics
+      - PROMETHEUS_QUERY_DURATION_UNIT=s
+    ports:
+      - "16686:16686"
+  otel_collector:
+    networks:
+      - mynetwork
+    image: otel/opentelemetry-collector-contrib:latest
+    volumes:
+      - ./docker/observability/otel-collector-config-connector.yml:/etc/otelcol/otel-collector-config.yml
+    command: --config /etc/otelcol/otel-collector-config.yml
+    ports:
+      - "1888:1888"   # pprof extension
+      - "8888:8888"   # Prometheus metrics exposed by the collector
+      - "8889:8889"   # Prometheus exporter metrics
+      - "13133:13133" # health_check extension
+      - "4317:4317"   # OTLP gRPC receiver
+      - "4318:4318"   # OTLP http receiver
+      - "55679:55679" # zpages extension
+    depends_on:
+      - jaeger
+  prometheus:
+    networks:
+      - mynetwork
+    image: prom/prometheus:latest
+    volumes:
+      - ./docker/observability/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+  grafana:
+    networks:
+      - mynetwork
+    image: grafana/grafana:latest
+    volumes:
+      - ./docker/observability/grafana.ini:/etc/grafana/grafana.ini
+      - ./docker/observability/grafana-datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    ports:
+      - "3000:3000"
 networks:
   mynetwork:

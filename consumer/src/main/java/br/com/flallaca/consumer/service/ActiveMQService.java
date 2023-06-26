@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
-@Service
 @Log4j2
+@Service
 public class ActiveMQService {
 
     @Autowired

@@ -2,10 +2,10 @@ FROM eclipse-temurin:17-jdk-alpine as build
 
 WORKDIR /workspace/app
 
-COPY mvnw .
-COPY .mvn .mvn
-COPY pom.xml .
-COPY src src
+COPY accounts/mvnw .
+COPY accounts/.mvn .mvn
+COPY accounts/pom.xml .
+COPY accounts/src src
 
 RUN ./mvnw install -DskipTests
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
@@ -19,4 +19,6 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 
-ENTRYPOINT ["java","-cp","app:app/lib/*","br.com.flallaca.accounts.AccountsApplication"]
+COPY ../docker/agent/opentelemetry-javaagent.jar /workspace/opentelemetry-javaagent.jar
+
+ENTRYPOINT ["java","-javaagent:/workspace/opentelemetry-javaagent.jar","-cp","app:app/lib/*","br.com.flallaca.accounts.AccountsApplication"]

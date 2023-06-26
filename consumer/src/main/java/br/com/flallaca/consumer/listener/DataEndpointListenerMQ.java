@@ -5,7 +5,10 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.activemq.command.ActiveMQObjectMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
+import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Log4j2
 @Component
@@ -15,14 +18,14 @@ public class DataEndpointListenerMQ {
     private ConsumerService consumerService;
 
     @JmsListener(destination = "${mq.request-queue-name}", containerFactory = "defaultFactory")
-    public void receiveMessage(ActiveMQObjectMessage message) {
+    public void receiveMessage(Message<List<String>> message) {
 
         log.info("Message received: {}", message);
 
         long startTime = System.currentTimeMillis();
 
-        var urls = consumerService.parseMessageReceivedToUrlsList(message.getContent().getData());
-        consumerService.consumeWebflux(urls);
+//        var urls = consumerService.parseMessageReceivedToUrlsList(message.getContent().getData());
+        consumerService.doConsumeWebflux(message.getPayload());
 
         long endTime = System.currentTimeMillis(); // Get current time after sleep
         long elapsedMillis = endTime - startTime; // Calculate elapsed time in milliseconds

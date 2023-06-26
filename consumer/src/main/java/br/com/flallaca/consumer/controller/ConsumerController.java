@@ -21,7 +21,7 @@ public class ConsumerController {
 
         long startTime = System.currentTimeMillis(); // Get current time in milliseconds
 
-//        service.consumeWebflux(loopSize);
+        service.consumeWebflux(loopSize);
 
         long endTime = System.currentTimeMillis(); // Get current time after sleep
         long elapsedMillis = endTime - startTime; // Calculate elapsed time in milliseconds
