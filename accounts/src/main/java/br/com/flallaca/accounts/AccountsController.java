@@ -46,12 +46,12 @@ public class AccountsController {
 
         var random = new Random();
 
-        int maxSeconds = 60; // TODO CHANGE TO 60s
-        int randomSeconds = random.nextInt(maxSeconds + 1);
+        int maxSeconds = 5; // TODO CHANGE TO 60s
+//        int randomSeconds = random.nextInt(maxSeconds + 1);
 
         try {
-            Thread.sleep(randomSeconds * 1000); // Convert seconds to milliseconds
-            log.info("Slept for " + randomSeconds + " seconds.");
+            Thread.sleep(maxSeconds * 1000); // Convert seconds to milliseconds
+            log.info("Slept for " + maxSeconds + " seconds.");
         } catch (InterruptedException e) {}
     }
 
