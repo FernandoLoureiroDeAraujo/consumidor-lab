@@ -1,4 +1,4 @@
-package br.com.flallaca.processor.model;
+package br.com.flallaca.processor.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -14,7 +14,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseObject {
+public class ResponseSkeletonDTO {
 
     @JsonProperty("meta")
     private String metadata;
@@ -23,7 +23,7 @@ public class ResponseObject {
     @JsonProperty("data")
     private Object data;
 
-    public ResponseObject(final Object data) {
+    public ResponseSkeletonDTO(final Object data) {
         this.data = data;
     }
 }

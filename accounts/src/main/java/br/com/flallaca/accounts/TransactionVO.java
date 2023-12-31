@@ -10,13 +10,14 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Transaction {
+@ToString
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class TransactionVO {
 
     @Size(min = 1, max = 100)
     private String transactionId;
@@ -39,7 +40,7 @@ public class Transaction {
     private String partieCheckDigit;
 
     @NotNull
-    private TransactionAmount transactionAmount;
+    private TransactionAmountVO transactionAmount;
 
     @NotNull
     @NotEmpty
@@ -62,7 +63,7 @@ public class Transaction {
     @NotEmpty
     private String completedAuthorisedPaymentType;
 
-    public Transaction createTransaction(Faker faker, TransactionAmount transactionAmount) {
+    public TransactionVO createTransaction(Faker faker, TransactionAmountVO transactionAmount) {
 
         this.setTransactionId(faker.idNumber().valid());
         this.setPartieBranchCode(faker.random().hex(4));

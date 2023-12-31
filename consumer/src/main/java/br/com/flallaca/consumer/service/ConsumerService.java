@@ -1,6 +1,7 @@
 package br.com.flallaca.consumer.service;
 
-import br.com.flallaca.consumer.model.ResponseObject;
+import br.com.flallaca.consumer.dto.ResponseSkeletonDTO;
+import br.com.flallaca.consumer.enums.MessageFormatType;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,10 +44,9 @@ public class ConsumerService {
                 .flatMap(url -> webClient.get()
                         .uri(url)
                         .retrieve()
-                        .bodyToMono(ResponseObject.class)
+                        .bodyToMono(ResponseSkeletonDTO.class)
                         .doOnNext(response -> {
-//                            log.info(((List<Transaction>) response.getData()).toString());
-                            activeMQService.sendMessage(processorQueue, response);
+                            activeMQService.sendMessage(processorQueue, MessageFormatType.PROTOBUF, response);
                         })
                         .onErrorResume(error -> {
                             log.error("Error calling " + url + ": " + error.getMessage());

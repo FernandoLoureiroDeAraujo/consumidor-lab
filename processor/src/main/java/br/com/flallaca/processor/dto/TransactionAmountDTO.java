@@ -1,4 +1,4 @@
-package br.com.flallaca.processor.model;
+package br.com.flallaca.processor.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TransactionAmount {
+public class TransactionAmountDTO {
 
     @JsonProperty("amount")
     private Object amount;

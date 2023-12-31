@@ -41,7 +41,7 @@ services:
       - mynetwork
     depends_on:
       - activemq
-      - jaeger
+#      - jaeger
     expose:
       - "8081:8081"
     env_file:
@@ -57,9 +57,11 @@ services:
       - mynetwork
     depends_on:
       - activemq
-      - jaeger
+#      - jaeger
     expose:
       - "8082:8082"
+    ports:
+      - "5002:5005"
     env_file:
       - docker/global-applications.env
     environment:
@@ -73,7 +75,7 @@ services:
       - mynetwork
     depends_on:
       - activemq
-      - jaeger
+#      - jaeger
     expose:
       - "8083:8083"
     env_file:
@@ -88,7 +90,7 @@ services:
       - mynetwork
     depends_on:
       - activemq
-      - jaeger
+#      - jaeger
     expose:
       - "8083:8083"
     env_file:
@@ -103,7 +105,7 @@ services:
       - mynetwork
     depends_on:
       - activemq
-      - jaeger
+#      - jaeger
     expose:
       - "8084:8084"
     env_file:
@@ -112,45 +114,45 @@ services:
       - OTEL_SERVICE_NAME=processor
 
   # OBSERVABILITY
-  jaeger:
-    networks:
-      - mynetwork
-    image: jaegertracing/all-in-one:latest
-    volumes:
-      - ./docker/observability/jaeger-ui.json:/etc/jaeger/jaeger-ui.json
-    command: --query.ui-config /etc/jaeger/jaeger-ui.json
-    environment:
-      - LOG_LEVEL=info
-      - METRICS_STORAGE_TYPE=prometheus
-      - PROMETHEUS_SERVER_URL=http://prometheus:9090
-      - PROMETHEUS_QUERY_SUPPORT_SPANMETRICS_CONNECTOR=true
-      - PROMETHEUS_QUERY_NAMESPACE=spanmetrics
-      - PROMETHEUS_QUERY_DURATION_UNIT=s
-    ports:
-      - "16686:16686" # serve frontend
-      - "14250:14250" # accept model.proto
-  otel_collector:
-    networks:
-      - mynetwork
-    image: otel/opentelemetry-collector-contrib:latest
-    volumes:
-      - ./docker/observability/otel-collector-config.yml:/etc/otelcol/otel-collector-config.yml
-    command: --config /etc/otelcol/otel-collector-config.yml
-    ports:
-      - "8888:8888"   # Prometheus metrics exposed by the collector
-      - "8889:8889"   # Prometheus exporter metrics
-      - "4317:4317"   # OTLP gRPC receiver
-      - "4318:4318"   # OTLP http receiver
-    depends_on:
-      - jaeger
-  prometheus:
-    networks:
-      - mynetwork
-    image: prom/prometheus:latest
-    volumes:
-      - ./docker/observability/prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
+#  jaeger:
+#    networks:
+#      - mynetwork
+#    image: jaegertracing/all-in-one:latest
+#    volumes:
+#      - ./docker/observability/jaeger-ui.json:/etc/jaeger/jaeger-ui.json
+#    command: --query.ui-config /etc/jaeger/jaeger-ui.json
+#    environment:
+#      - LOG_LEVEL=info
+#      - METRICS_STORAGE_TYPE=prometheus
+#      - PROMETHEUS_SERVER_URL=http://prometheus:9090
+#      - PROMETHEUS_QUERY_SUPPORT_SPANMETRICS_CONNECTOR=true
+#      - PROMETHEUS_QUERY_NAMESPACE=spanmetrics
+#      - PROMETHEUS_QUERY_DURATION_UNIT=s
+#    ports:
+#      - "16686:16686" # serve frontend
+#      - "14250:14250" # accept model.proto
+#  otel_collector:
+#    networks:
+#      - mynetwork
+#    image: otel/opentelemetry-collector-contrib:latest
+#    volumes:
+#      - ./docker/observability/otel-collector-config.yml:/etc/otelcol/otel-collector-config.yml
+#    command: --config /etc/otelcol/otel-collector-config.yml
+#    ports:
+#      - "8888:8888"   # Prometheus metrics exposed by the collector
+#      - "8889:8889"   # Prometheus exporter metrics
+#      - "4317:4317"   # OTLP gRPC receiver
+#      - "4318:4318"   # OTLP http receiver
+#    depends_on:
+#      - jaeger
+#  prometheus:
+#    networks:
+#      - mynetwork
+#    image: prom/prometheus:latest
+#    volumes:
+#      - ./docker/observability/prometheus.yml:/etc/prometheus/prometheus.yml
+#    ports:
+#      - "9090:9090"
 #  grafana:
 #    networks:
 #      - mynetwork

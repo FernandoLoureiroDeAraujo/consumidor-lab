@@ -16,19 +16,19 @@ import java.util.Random;
 public class AccountsController {
 
     @GetMapping("/accounts/transactions")
-    public ResponseEntity<ResponseObject> transactions(@RequestParam(name = "page", defaultValue = "1", required = false) Integer page,
-                                                       @RequestParam(name = "page-size", defaultValue = "25", required = false) Integer pageSize,
-                                                       @RequestParam(name = "skip-delay", defaultValue = "false", required = false) boolean skipDelay) {
+    public ResponseEntity<ResponseSkeletonVO> transactions(@RequestParam(name = "page", defaultValue = "1", required = false) Integer page,
+                                                           @RequestParam(name = "page-size", defaultValue = "25", required = false) Integer pageSize,
+                                                           @RequestParam(name = "skip-delay", defaultValue = "false", required = false) boolean skipDelay) {
 
         log.info("Starting request");
 
-        var transactions = new ArrayList<Transaction>();
+        var transactions = new ArrayList<TransactionVO>();
         var faker = new Faker();
 
         for (int x = 0; x < pageSize; x++) {
 
-            var transactionAmount = new TransactionAmount().createTransactionAmount(faker);
-            var transaction = new Transaction().createTransaction(faker, transactionAmount);
+            var transactionAmount = new TransactionAmountVO().createTransactionAmount(faker);
+            var transaction = new TransactionVO().createTransaction(faker, transactionAmount);
 
             transactions.add(transaction);
         }
@@ -39,7 +39,7 @@ public class AccountsController {
 
         log.info("Ending request");
 
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(transactions));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseSkeletonVO(transactions));
     }
 
     private void simulateResponseTime() {

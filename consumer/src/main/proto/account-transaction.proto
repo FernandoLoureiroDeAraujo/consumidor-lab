@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package br.com.flallaca.consumer.proto;
+
+option java_outer_classname = "AccountTransaction";
+
+message Transaction {
+  string transactionId = 1;
+  string completedAuthorisedPaymentType = 2;
+  string creditDebitType = 3;
+  string transactionName = 4;
+  string type = 5;
+
+  message TransactionAmount {
+    string amount = 1;
+    string currency = 2;
+  }
+  TransactionAmount transactionAmount = 6;
+
+  string transactionDate = 7;
+  string partieCnpjCpf = 8;
+  string partiePersonType = 9;
+  string partieCompeCode = 10;
+  string partieBranchCode = 11;
+  string partieNumber = 12;
+  string partieCheckDigit = 13;
+}
+
+message Links {
+  string self = 1;
+  string first = 2;
+  string prev = 3;
+  string next = 4;
+}
+
+message Meta {
+  string requestDateTime = 1;
+}
+
+message ResponseSkeleton {
+  repeated Transaction data = 1;
+  Links links = 2;
+  Meta meta = 3;
+}

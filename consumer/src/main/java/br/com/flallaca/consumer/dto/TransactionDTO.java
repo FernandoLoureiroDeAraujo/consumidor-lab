@@ -1,4 +1,4 @@
-package br.com.flallaca.consumer.model;
+package br.com.flallaca.consumer.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Transaction {
+public class TransactionDTO {
 
     @Size(min = 1, max = 100)
     private String transactionId;
@@ -37,7 +37,7 @@ public class Transaction {
     private String partieCheckDigit;
 
     @NotNull
-    private TransactionAmount transactionAmount;
+    private TransactionAmountDTO transactionAmount;
 
     @NotNull
     @NotEmpty

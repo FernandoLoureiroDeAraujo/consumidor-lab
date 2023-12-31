@@ -3,24 +3,22 @@ package br.com.flallaca.accounts;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.javafaker.Faker;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TransactionAmount {
+public class TransactionAmountVO {
 
     @JsonProperty("amount")
-    private Object amount;
+    private String amount;
     @JsonProperty("currency")
-    private Object currency;
+    private String currency;
 
-    public TransactionAmount createTransactionAmount(Faker faker) {
+    public TransactionAmountVO createTransactionAmount(Faker faker) {
 
         this.setAmount(faker.number().digits(4));
         this.setCurrency(faker.currency().code());
