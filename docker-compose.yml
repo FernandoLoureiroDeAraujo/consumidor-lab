@@ -44,6 +44,8 @@ services:
 #      - jaeger
     expose:
       - "8081:8081"
+    ports:
+      - "5001:5002"
     env_file:
       - docker/global-applications.env
     environment:
@@ -61,7 +63,7 @@ services:
     expose:
       - "8082:8082"
     ports:
-      - "5002:5005"
+      - "5002:5002"
     env_file:
       - docker/global-applications.env
     environment:
@@ -78,6 +80,8 @@ services:
 #      - jaeger
     expose:
       - "8083:8083"
+    ports:
+      - "5003:5002"
     env_file:
       - docker/global-applications.env
     environment:
@@ -93,6 +97,8 @@ services:
 #      - jaeger
     expose:
       - "8083:8083"
+    ports:
+      - "5004:5002"
     env_file:
       - docker/global-applications.env
     environment:
@@ -108,6 +114,8 @@ services:
 #      - jaeger
     expose:
       - "8084:8084"
+    ports:
+      - "5005:5002"
     env_file:
       - docker/global-applications.env
     environment:

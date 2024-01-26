@@ -23,4 +23,4 @@ COPY ../docker/agent/opentelemetry-javaagent.jar /workspace/opentelemetry-javaag
 
 EXPOSE 5005
 
-ENTRYPOINT ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-javaagent:/workspace/opentelemetry-javaagent.jar","-cp","app:app/lib/*","br.com.flallaca.consumer.ConsumerApplication"]
+ENTRYPOINT ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5002", "-javaagent:/workspace/opentelemetry-javaagent.jar","-cp","app:app/lib/*","br.com.flallaca.consumer.ConsumerApplication"]
