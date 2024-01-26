@@ -1,7 +1,6 @@
 package br.com.flallaca.consumer.service;
 
 import br.com.flallaca.consumer.dto.ResponseSkeletonDTO;
-import br.com.flallaca.consumer.dto.TransactionDTO;
 import br.com.flallaca.consumer.enums.MessageFormatType;
 import br.com.flallaca.consumer.mapper.AccountTransactionMapper;
 import br.com.flallaca.consumer.proto.AccountTransaction;
@@ -23,17 +22,32 @@ public class ActiveMQService {
 
     public void sendMessage(String queueName, MessageFormatType messageFormatType, ResponseSkeletonDTO message) {
 
-        jmsTemplate.send(queueName, session -> {
-            BytesMessage jmsMessage = null;
-            try {
-                jmsMessage = session.createBytesMessage();
-                jmsMessage.writeBytes(createMessageForFormatType(messageFormatType, message));
-                jmsMessage.setStringProperty("formatType", messageFormatType.name());
-                return jmsMessage;
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
-            }
-        });
+        // TODO MELHORAR ESSE TRECHO
+        if (messageFormatType.equals(MessageFormatType.JSON)) {
+            jmsTemplate.send(queueName, session -> {
+                TextMessage jmsMessage = null;
+                try {
+                    jmsMessage = session.createTextMessage();
+                    jmsMessage.setText(new ObjectMapper().writeValueAsString(message));
+                    jmsMessage.setStringProperty("formatType", messageFormatType.name());
+                    return jmsMessage;
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        } else {
+            jmsTemplate.send(queueName, session -> {
+                BytesMessage jmsMessage = null;
+                try {
+                    jmsMessage = session.createBytesMessage();
+                    jmsMessage.writeBytes(createMessageForFormatType(messageFormatType, message));
+                    jmsMessage.setStringProperty("formatType", messageFormatType.name());
+                    return jmsMessage;
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
         log.info("Sent to queue {} the message: {}", queueName, message);
     }
 
@@ -42,9 +56,9 @@ public class ActiveMQService {
         byte[] value = null;
 
         switch(messageFormatType) {
-            case JSON:
-                value = new ObjectMapper().writeValueAsBytes(message);
-                break;
+//            case JSON:
+//                value = new ObjectMapper().writeValueAsBytes(message);
+//                break;
             case PROTOBUF:
                 AccountTransaction.ResponseSkeleton map = AccountTransactionMapper.INSTANCE.map(message);
                 value = map.toByteArray();
