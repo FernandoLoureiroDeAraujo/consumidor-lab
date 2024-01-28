@@ -56,6 +56,16 @@
             <version>3.24.4</version>
             <scope>compile</scope>
         </dependency>
+		<dependency>
+			<groupId>io.protostuff</groupId>
+			<artifactId>protostuff-core</artifactId>
+			<version>1.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.protostuff</groupId>
+			<artifactId>protostuff-runtime</artifactId>
+			<version>1.8.0</version>
+		</dependency>
     </dependencies>
 
 	<build>

@@ -6,6 +6,9 @@ import br.com.flallaca.consumer.mapper.AccountTransactionMapper;
 import br.com.flallaca.consumer.proto.AccountTransaction;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.protostuff.LinkedBuffer;
+import io.protostuff.ProtobufIOUtil;
+import io.protostuff.runtime.RuntimeSchema;
 import jakarta.jms.BytesMessage;
 import jakarta.jms.TextMessage;
 import lombok.extern.log4j.Log4j2;
@@ -51,21 +54,27 @@ public class ActiveMQService {
         log.info("Sent to queue {} the message: {}", queueName, message);
     }
 
-    private byte[] createMessageForFormatType(MessageFormatType messageFormatType, ResponseSkeletonDTO message) throws JsonProcessingException {
+    private byte[] createMessageForFormatType(MessageFormatType messageFormatType, ResponseSkeletonDTO responseDTO) throws JsonProcessingException {
 
         byte[] value = null;
 
         switch(messageFormatType) {
 //            case JSON:
-//                value = new ObjectMapper().writeValueAsBytes(message);
+//                value = new ObjectMapper().writeValueAsBytes(responseDTO);
 //                break;
             case PROTOBUF:
-                AccountTransaction.ResponseSkeleton map = AccountTransactionMapper.INSTANCE.map(message);
+                AccountTransaction.ResponseSkeleton map = AccountTransactionMapper.INSTANCE.map(responseDTO);
                 value = map.toByteArray();
-                // code block
                 break;
             case PROTOSTUFF:
-                // code block
+                var buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
+                try {
+                    value = ProtobufIOUtil.toByteArray(responseDTO,
+                                                       RuntimeSchema.createFrom(ResponseSkeletonDTO.class),
+                                                       buffer);
+                } finally {
+                    buffer.clear();
+                }
                 break;
             case MSGPACK:
                 // code block

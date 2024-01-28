@@ -13,8 +13,8 @@ import lombok.*;
 public class TransactionAmountDTO {
 
     @JsonProperty("amount")
-    private Object amount;
+    private String amount;
     @JsonProperty("currency")
-    private Object currency;
+    private String currency;
 
 }

@@ -46,7 +46,8 @@ public class ConsumerService {
                         .retrieve()
                         .bodyToMono(ResponseSkeletonDTO.class)
                         .doOnNext(response -> {
-                            activeMQService.sendMessage(processorQueue, MessageFormatType.PROTOBUF, response);
+                            // TODO RECEBER ESSA INFO DE PROPERTIE
+                            activeMQService.sendMessage(processorQueue, MessageFormatType.MSGPACK, response);
                         })
                         .onErrorResume(error -> {
                             log.error("Error calling " + url + ": " + error.getMessage());
