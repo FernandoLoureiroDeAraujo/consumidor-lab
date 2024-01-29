@@ -66,7 +66,17 @@
 			<artifactId>protostuff-runtime</artifactId>
 			<version>1.8.0</version>
 		</dependency>
-    </dependencies>
+		<dependency>
+			<groupId>org.msgpack</groupId>
+			<artifactId>msgpack</artifactId>
+			<version>0.6.12</version>
+		</dependency>
+		<dependency>
+			<groupId>com.esotericsoftware</groupId>
+			<artifactId>kryo</artifactId>
+			<version>5.6.0</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>

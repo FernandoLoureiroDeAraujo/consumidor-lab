@@ -1,5 +1,6 @@
 package br.com.flallaca.consumer.controller;
 
+import br.com.flallaca.consumer.enums.MessageFormatType;
 import br.com.flallaca.consumer.service.ConsumerService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +16,14 @@ public class ConsumerController {
     private ConsumerService service;
 
     @GetMapping("consume/accounts/transactions")
-    public void consume(@RequestParam(name = "loop-size", defaultValue = "10", required = false) Integer loopSize) {
+    public void consume(@RequestParam(name = "message-format-type", defaultValue = "JSON", required = false) MessageFormatType messageFormatType,
+                        @RequestParam(name = "loop-size", defaultValue = "10", required = false) Integer loopSize) {
 
         log.info("Starting request");
 
         long startTime = System.currentTimeMillis(); // Get current time in milliseconds
 
-        service.consumeWebflux(loopSize);
+        service.consumeWebflux(messageFormatType, loopSize);
 
         long endTime = System.currentTimeMillis(); // Get current time after sleep
         long elapsedMillis = endTime - startTime; // Calculate elapsed time in milliseconds

@@ -5,6 +5,10 @@ WORKDIR /workspace/app
 COPY consumer/mvnw .
 COPY consumer/.mvn .mvn
 COPY consumer/pom.xml .
+
+# Instala as dependências do Maven
+RUN ./mvnw dependency:go-offline
+
 COPY consumer/src src
 
 RUN ./mvnw install -DskipTests

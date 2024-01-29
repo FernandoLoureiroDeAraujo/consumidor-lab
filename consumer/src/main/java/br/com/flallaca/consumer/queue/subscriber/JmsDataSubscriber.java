@@ -1,36 +1,44 @@
-package br.com.flallaca.consumer.listener;
+package br.com.flallaca.consumer.queue.subscriber;
 
+import br.com.flallaca.consumer.enums.MessageFormatType;
 import br.com.flallaca.consumer.service.ConsumerService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
 import lombok.extern.log4j.Log4j2;
-import org.apache.activemq.command.ActiveMQObjectMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
-import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Log4j2
 @Component
-public class DataEndpointListenerMQ {
+public class JmsDataSubscriber {
 
     @Autowired
     private ConsumerService consumerService;
 
     @JmsListener(destination = "${mq.request-queue-name}", containerFactory = "defaultFactory")
-    public void receiveMessage(Message<List<String>> message) {
+    public void receiveMessage(Message message) throws JMSException, JsonProcessingException {
 
         log.info("Message received: {}", message);
 
         long startTime = System.currentTimeMillis();
 
-//        var urls = consumerService.parseMessageReceivedToUrlsList(message.getContent().getData());
-        consumerService.doConsumeWebflux(message.getPayload());
+        var messageFormatType = (MessageFormatType) MessageFormatType.valueOf(message.getStringProperty("formatType"));
+        consumerService.doConsumeWebflux(messageFormatType, getMessageBodyData(message));
 
         long endTime = System.currentTimeMillis(); // Get current time after sleep
         long elapsedMillis = endTime - startTime; // Calculate elapsed time in milliseconds
         long elapsedSeconds = elapsedMillis / 1000; // Convert elapsed time to seconds
 
         log.info("Elapsed time: " + elapsedSeconds + " seconds.");
+    }
+    
+    private List<String> getMessageBodyData(Message message) throws JMSException, JsonProcessingException {
+        return new ObjectMapper().readValue(message.getBody(String.class), new TypeReference<List<String>>(){});
     }
 }

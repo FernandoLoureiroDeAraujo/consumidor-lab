@@ -7,6 +7,11 @@ COPY accounts/.mvn .mvn
 COPY accounts/pom.xml .
 COPY accounts/src src
 
+# Instala as dependências do Maven
+RUN ./mvnw dependency:go-offline
+
+COPY accounts/src src
+
 RUN ./mvnw install -DskipTests
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 

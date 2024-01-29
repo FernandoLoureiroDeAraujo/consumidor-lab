@@ -5,6 +5,10 @@ WORKDIR /workspace/app
 COPY processor/mvnw .
 COPY processor/.mvn .mvn
 COPY processor/pom.xml .
+
+# Instala as dependências do Maven
+RUN ./mvnw dependency:go-offline
+
 COPY processor/src src
 
 RUN ./mvnw install -DskipTests

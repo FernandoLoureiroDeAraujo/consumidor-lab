@@ -1,5 +1,6 @@
 package br.com.flallaca.scheduler.service;
 
+import br.com.flallaca.scheduler.enums.MessageFormatType;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +14,7 @@ import java.util.List;
 public class SchedulerService {
 
     @Autowired
-    private ActiveMQService activeMQService;
+    private JmsDataPublisherToConsumer jmsDataPublisherToConsumer;
 
     @Value("${application.request.url.consumer}")
     private String urlConsumer;
@@ -21,10 +22,10 @@ public class SchedulerService {
     @Value("${mq.request-queue-name}")
     private String queueName;
 
-    public void processDatas(Integer loopSize) {
+    public void processDatas(MessageFormatType messageFormatType, Integer loopSize) {
 
         var urls = getEndpointsToExecute(loopSize);
-        sendUrlsToQueue(urls);
+        sendUrlsToQueue(messageFormatType, urls);
         log.info("Datas process finished");
     }
 
@@ -41,8 +42,8 @@ public class SchedulerService {
         return hosts;
     }
 
-    private void sendUrlsToQueue(List<String> urls) {
+    private void sendUrlsToQueue(MessageFormatType messageFormatType, List<String> urls) {
         log.info("Sending URLs to queue - URLs group size: {}", urls.size());
-        activeMQService.sendMessage(queueName, urls);
+        jmsDataPublisherToConsumer.sendMessage(messageFormatType, queueName, urls);
     }
 }

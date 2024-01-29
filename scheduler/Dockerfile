@@ -7,6 +7,11 @@ COPY scheduler/.mvn .mvn
 COPY scheduler/pom.xml .
 COPY scheduler/src src
 
+# Instala as dependências do Maven
+RUN ./mvnw dependency:go-offline
+
+COPY scheduler/src src
+
 RUN ./mvnw install -DskipTests
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 

@@ -1,15 +1,12 @@
 package br.com.flallaca.consumer.mapper;
 
 import br.com.flallaca.consumer.dto.ResponseSkeletonDTO;
-import br.com.flallaca.consumer.dto.TransactionDTO;
 import br.com.flallaca.consumer.proto.AccountTransaction;
 import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
-
-import java.util.List;
 
 @Mapper(collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)

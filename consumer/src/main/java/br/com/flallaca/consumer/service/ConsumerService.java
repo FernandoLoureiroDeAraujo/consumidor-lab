@@ -2,6 +2,7 @@ package br.com.flallaca.consumer.service;
 
 import br.com.flallaca.consumer.dto.ResponseSkeletonDTO;
 import br.com.flallaca.consumer.enums.MessageFormatType;
+import br.com.flallaca.consumer.queue.publisher.JmsDataPublisherToProcessor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,8 +12,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,14 +26,14 @@ public class ConsumerService {
     private String processorQueue;
 
     @Autowired
-    private ActiveMQService activeMQService;
+    private JmsDataPublisherToProcessor JmsDataPublisherToProcessor;
 
-    public void consumeWebflux(Integer loopSize) {
+    public void consumeWebflux(MessageFormatType messageFormatType, Integer loopSize) {
         var endpointsToExecute = getEndpointsToExecute(loopSize);
-        doConsumeWebflux(endpointsToExecute);
+        doConsumeWebflux(messageFormatType, endpointsToExecute);
     }
 
-    public void doConsumeWebflux(List<String> urls) {
+    public void doConsumeWebflux(MessageFormatType messageFormatType, List<String> urls) {
 
         var webClient = WebClient.create();
 
@@ -46,8 +45,7 @@ public class ConsumerService {
                         .retrieve()
                         .bodyToMono(ResponseSkeletonDTO.class)
                         .doOnNext(response -> {
-                            // TODO RECEBER ESSA INFO DE PROPERTIE
-                            activeMQService.sendMessage(processorQueue, MessageFormatType.MSGPACK, response);
+                            JmsDataPublisherToProcessor.sendMessage(processorQueue, messageFormatType, response);
                         })
                         .onErrorResume(error -> {
                             log.error("Error calling " + url + ": " + error.getMessage());
@@ -67,17 +65,5 @@ public class ConsumerService {
         log.info("{} URLs recovered", hosts.size());
 
         return hosts;
-    }
-
-    public List<String> parseMessageReceivedToUrlsList(byte[] urlsBytes) {
-
-        var in = new ByteArrayInputStream(urlsBytes);
-
-        try {
-            var is = new ObjectInputStream(in);
-            return (List<String>) is.readObject();
-        } catch (Exception ex) {}
-
-        return null;
     }
 }
