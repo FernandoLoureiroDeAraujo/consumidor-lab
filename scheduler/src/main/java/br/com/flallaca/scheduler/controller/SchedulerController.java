@@ -1,5 +1,6 @@
 package br.com.flallaca.scheduler.controller;
 
+import br.com.flallaca.scheduler.enums.MessageBrokerType;
 import br.com.flallaca.scheduler.enums.MessageFormatType;
 import br.com.flallaca.scheduler.service.JmsDataPublisherToConsumer;
 import br.com.flallaca.scheduler.service.SchedulerService;
@@ -18,10 +19,11 @@ public class SchedulerController {
     private SchedulerService schedulerService;
 
     @GetMapping(path = "scheduler/send-data")
-    public ResponseEntity<?> sendData(@RequestParam(name = "message-format-type", defaultValue = "JSON", required = false) MessageFormatType messageFormatType,
+    public ResponseEntity<?> sendData(@RequestParam(name = "message-broker-type", defaultValue = "JMS", required = false) MessageBrokerType messageBrokerType,
+                                      @RequestParam(name = "message-format-type", defaultValue = "JSON", required = false) MessageFormatType messageFormatType,
                                       @RequestParam(name = "loop-size", defaultValue = "10", required = false) Integer loopSize) {
 
-        schedulerService.processDatas(messageFormatType, loopSize);
+        schedulerService.processDatas(messageBrokerType, messageFormatType, loopSize);
 
         return ResponseEntity.ok().build();
     }

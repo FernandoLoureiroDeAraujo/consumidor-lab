@@ -47,7 +47,7 @@ public class JmsDataSubscriber {
 //    }
 
     @JmsListener(destination = "${mq.processor-queue-name}", containerFactory = "defaultFactory")
-    public void receiveMessageWithFormatTypeKrio(Message message) throws JMSException {
+    public void receiveMessage(Message message) throws JMSException {
 
         var messageFormatType = MessageFormatType.valueOf(message.getStringProperty("formatType"));
 

@@ -1,8 +1,10 @@
 package br.com.flallaca.consumer.service;
 
 import br.com.flallaca.consumer.dto.ResponseSkeletonDTO;
+import br.com.flallaca.consumer.enums.MessageBrokerType;
 import br.com.flallaca.consumer.enums.MessageFormatType;
 import br.com.flallaca.consumer.queue.publisher.JmsDataPublisherToProcessor;
+import br.com.flallaca.consumer.queue.publisher.KafkaDataPublisherToProcessor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,12 +30,15 @@ public class ConsumerService {
     @Autowired
     private JmsDataPublisherToProcessor JmsDataPublisherToProcessor;
 
-    public void consumeWebflux(MessageFormatType messageFormatType, Integer loopSize) {
+    @Autowired
+    private KafkaDataPublisherToProcessor kafkaDataPublisherToProcessor;
+
+    public void consumeWebflux(MessageBrokerType messageBrokerType, MessageFormatType messageFormatType, Integer loopSize) {
         var endpointsToExecute = getEndpointsToExecute(loopSize);
-        doConsumeWebflux(messageFormatType, endpointsToExecute);
+        doConsumeWebflux(messageBrokerType, messageFormatType, endpointsToExecute);
     }
 
-    public void doConsumeWebflux(MessageFormatType messageFormatType, List<String> urls) {
+    public void doConsumeWebflux(MessageBrokerType messageBrokerType, MessageFormatType messageFormatType, List<String> urls) {
 
         var webClient = WebClient.create();
 
@@ -45,7 +50,12 @@ public class ConsumerService {
                         .retrieve()
                         .bodyToMono(ResponseSkeletonDTO.class)
                         .doOnNext(response -> {
-                            JmsDataPublisherToProcessor.sendMessage(processorQueue, messageFormatType, response);
+                            if (MessageBrokerType.JMS.equals(messageBrokerType)) {
+                                JmsDataPublisherToProcessor.sendMessage(processorQueue, messageFormatType, response);
+                            }
+                            if (MessageBrokerType.KAFKA.equals(messageBrokerType)) {
+                                kafkaDataPublisherToProcessor.sendMessage(processorQueue, messageFormatType, response);
+                            }
                         })
                         .onErrorResume(error -> {
                             log.error("Error calling " + url + ": " + error.getMessage());

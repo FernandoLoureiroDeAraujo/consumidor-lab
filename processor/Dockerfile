@@ -7,7 +7,7 @@ COPY processor/.mvn .mvn
 COPY processor/pom.xml .
 
 # Instala as dependências do Maven
-RUN ./mvnw dependency:go-offline
+RUN ./mvnw -f pom.xml dependency:go-offline
 
 COPY processor/src src
 

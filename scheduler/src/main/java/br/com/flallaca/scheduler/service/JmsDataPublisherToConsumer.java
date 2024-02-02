@@ -1,5 +1,6 @@
 package br.com.flallaca.scheduler.service;
 
+import br.com.flallaca.scheduler.enums.MessageBrokerType;
 import br.com.flallaca.scheduler.enums.MessageFormatType;
 import jakarta.jms.JMSException;
 import jakarta.jms.Message;
@@ -18,11 +19,12 @@ public class JmsDataPublisherToConsumer {
     @Autowired
     private JmsTemplate jmsTemplate;
 
-    public void sendMessage(MessageFormatType messageFormatType, String queueName, List<String> urls) {
+    public void sendMessage(MessageBrokerType messageBrokerType, MessageFormatType messageFormatType, String queueName, List<String> urls) {
 
         var postProcessor = new MessagePostProcessor() {
             @Override
             public Message postProcessMessage(Message message) throws JMSException {
+                message.setStringProperty("brokerType", messageBrokerType.name());
                 message.setStringProperty("formatType", messageFormatType.name());
                 return message;
             }

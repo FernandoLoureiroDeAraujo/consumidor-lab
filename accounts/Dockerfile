@@ -5,10 +5,9 @@ WORKDIR /workspace/app
 COPY accounts/mvnw .
 COPY accounts/.mvn .mvn
 COPY accounts/pom.xml .
-COPY accounts/src src
 
 # Instala as dependências do Maven
-RUN ./mvnw dependency:go-offline
+RUN ./mvnw -f pom.xml dependency:go-offline
 
 COPY accounts/src src
 

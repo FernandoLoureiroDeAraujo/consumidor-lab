@@ -7,7 +7,7 @@ COPY consumer/.mvn .mvn
 COPY consumer/pom.xml .
 
 # Instala as dependências do Maven
-RUN ./mvnw dependency:go-offline
+RUN ./mvnw -f pom.xml dependency:go-offline
 
 COPY consumer/src src
 

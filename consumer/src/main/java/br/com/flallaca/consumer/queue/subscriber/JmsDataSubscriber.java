@@ -1,5 +1,6 @@
 package br.com.flallaca.consumer.queue.subscriber;
 
+import br.com.flallaca.consumer.enums.MessageBrokerType;
 import br.com.flallaca.consumer.enums.MessageFormatType;
 import br.com.flallaca.consumer.service.ConsumerService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -28,8 +29,10 @@ public class JmsDataSubscriber {
 
         long startTime = System.currentTimeMillis();
 
+        var messageBrokerType = (MessageBrokerType) MessageBrokerType.valueOf(message.getStringProperty("brokerType"));
         var messageFormatType = (MessageFormatType) MessageFormatType.valueOf(message.getStringProperty("formatType"));
-        consumerService.doConsumeWebflux(messageFormatType, getMessageBodyData(message));
+
+        consumerService.doConsumeWebflux(messageBrokerType, messageFormatType, getMessageBodyData(message));
 
         long endTime = System.currentTimeMillis(); // Get current time after sleep
         long elapsedMillis = endTime - startTime; // Calculate elapsed time in milliseconds

@@ -5,10 +5,9 @@ WORKDIR /workspace/app
 COPY scheduler/mvnw .
 COPY scheduler/.mvn .mvn
 COPY scheduler/pom.xml .
-COPY scheduler/src src
 
 # Instala as dependências do Maven
-RUN ./mvnw dependency:go-offline
+RUN ./mvnw -f pom.xml dependency:go-offline
 
 COPY scheduler/src src
 
