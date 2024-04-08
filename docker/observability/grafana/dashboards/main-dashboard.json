@@ -1,0 +1,694 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 33,
+      "panels": [],
+      "title": "PAINEL",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "d3739ef9-7307-4c63-9b1c-d8e2793b8adc"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "µs"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "id": 1,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "colorByField": "Average",
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "10.0.1",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "url.original",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "asc",
+                "orderBy": "1",
+                "size": "0"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "d3739ef9-7307-4c63-9b1c-d8e2793b8adc"
+          },
+          "hide": false,
+          "metrics": [
+            {
+              "field": "transaction.duration.us",
+              "id": "1",
+              "type": "avg"
+            }
+          ],
+          "query": "/scheduler/send-data?loop-size=${SIZE}",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "MENOR TEMPO -> MAIOR TEMPO | QTD EXECUÇÕES: ${SIZE}",
+      "transformations": [],
+      "type": "barchart"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 12,
+      "panels": [],
+      "title": "BROKER: ${BROKER} | QTD EXECUÇÕES: ${SIZE}",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "d3739ef9-7307-4c63-9b1c-d8e2793b8adc"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "µs"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 10
+      },
+      "id": 17,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "colorByField": "Average",
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "10.0.1",
+      "repeat": "BROKER",
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "url.original",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "asc",
+                "orderBy": "1",
+                "size": "0"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "d3739ef9-7307-4c63-9b1c-d8e2793b8adc"
+          },
+          "hide": false,
+          "metrics": [
+            {
+              "field": "transaction.duration.us",
+              "id": "1",
+              "type": "avg"
+            }
+          ],
+          "query": "/scheduler/send-data?loop-size=${SIZE}&message-broker-type=${BROKER}",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "${BROKER}",
+      "transformations": [],
+      "type": "barchart"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 19
+      },
+      "id": 7,
+      "panels": [],
+      "title": "JMS - {FORMAT} | QTD EXECUÇÕES: ${SIZE}",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "d3739ef9-7307-4c63-9b1c-d8e2793b8adc"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "µs"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 0,
+        "y": 20
+      },
+      "id": 2,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "colorByField": "Average",
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "10.0.1",
+      "repeat": "FORMAT",
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "url.original",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "asc",
+                "orderBy": "1",
+                "size": "0"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "d3739ef9-7307-4c63-9b1c-d8e2793b8adc"
+          },
+          "hide": false,
+          "metrics": [
+            {
+              "field": "transaction.duration.us",
+              "id": "1",
+              "type": "avg"
+            }
+          ],
+          "query": "\"/scheduler/send-data?loop-size=${SIZE}&message-broker-type=JMS&message-format-type=${FORMAT}\"",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "${FORMAT}",
+      "transformations": [],
+      "type": "barchart"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 38
+      },
+      "id": 22,
+      "panels": [],
+      "title": "KAFKA - {FORMAT} | QTD EXECUÇÕES: ${SIZE}",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "d3739ef9-7307-4c63-9b1c-d8e2793b8adc"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "µs"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 0,
+        "y": 39
+      },
+      "id": 27,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "colorByField": "Average",
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "10.0.1",
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "url.original",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "asc",
+                "orderBy": "_term",
+                "size": "0"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "d3739ef9-7307-4c63-9b1c-d8e2793b8adc"
+          },
+          "hide": false,
+          "metrics": [
+            {
+              "field": "transaction.duration.us",
+              "id": "1",
+              "type": "avg"
+            }
+          ],
+          "query": "\"/scheduler/send-data?loop-size=${SIZE}&message-broker-type=KAFKA&message-format-type=${FORMAT}\"",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "${FORMAT}",
+      "transformations": [],
+      "type": "barchart"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "hide": 0,
+        "includeAll": true,
+        "label": "BROKER",
+        "multi": false,
+        "name": "BROKER",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "JMS",
+            "value": "JMS"
+          },
+          {
+            "selected": false,
+            "text": "KAFKA",
+            "value": "KAFKA"
+          }
+        ],
+        "query": "JMS, KAFKA",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "hide": 0,
+        "includeAll": true,
+        "label": "FORMAT",
+        "multi": false,
+        "name": "FORMAT",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "JSON",
+            "value": "JSON"
+          },
+          {
+            "selected": false,
+            "text": "PROTOBUF",
+            "value": "PROTOBUF"
+          },
+          {
+            "selected": false,
+            "text": "PROTOSTUFF",
+            "value": "PROTOSTUFF"
+          },
+          {
+            "selected": false,
+            "text": "KRYO",
+            "value": "KRYO"
+          },
+          {
+            "selected": false,
+            "text": "MSGPACK",
+            "value": "MSGPACK"
+          }
+        ],
+        "query": "JSON, PROTOBUF, PROTOSTUFF, KRYO, MSGPACK",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "5",
+          "value": "5"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "SIZE",
+        "multi": false,
+        "name": "SIZE",
+        "options": [
+          {
+            "selected": false,
+            "text": "1",
+            "value": "1"
+          },
+          {
+            "selected": true,
+            "text": "5",
+            "value": "5"
+          },
+          {
+            "selected": false,
+            "text": "10",
+            "value": "10"
+          },
+          {
+            "selected": false,
+            "text": "25",
+            "value": "25"
+          },
+          {
+            "selected": false,
+            "text": "100",
+            "value": "100"
+          },
+          {
+            "selected": false,
+            "text": "500",
+            "value": "500"
+          },
+          {
+            "selected": false,
+            "text": "1000",
+            "value": "1000"
+          },
+          {
+            "selected": false,
+            "text": "10000",
+            "value": "10000"
+          },
+          {
+            "selected": false,
+            "text": "100000",
+            "value": "100000"
+          },
+          {
+            "selected": false,
+            "text": "1000000",
+            "value": "1000000"
+          }
+        ],
+        "query": "1, 5, 10, 25, 100, 500, 1000, 10000, 100000, 1000000",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Consumidor Métricas",
+  "uid": "b138992b-b831-4afe-9386-daabdc9b1a7a",
+  "version": 9,
+  "weekStart": ""
+}

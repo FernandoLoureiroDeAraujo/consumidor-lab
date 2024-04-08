@@ -24,6 +24,12 @@ exporters:
     endpoint: "jaeger:14250"
     tls:
       insecure: true
+  otlphttp/elastic:
+    endpoint: "http://172.17.0.1:8200"
+    headers:
+      Authorization: "Basic ZWxhc3RpYzpjaGFuZ2VfbWU="
+    tls:
+      insecure: true
 
 service:
   pipelines:
@@ -39,7 +45,7 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [jaeger]
+      exporters: [jaeger, otlphttp/elastic]
     logs:
       receivers: [otlp]
       processors: [batch]
