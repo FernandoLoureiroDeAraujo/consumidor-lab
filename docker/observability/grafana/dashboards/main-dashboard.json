@@ -18,7 +18,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -32,7 +31,7 @@
       },
       "id": 33,
       "panels": [],
-      "title": "PAINEL",
+      "title": "GENERAL",
       "type": "row"
     },
     {
@@ -137,12 +136,12 @@
               "type": "avg"
             }
           ],
-          "query": "/scheduler/send-data?loop-size=${SIZE}",
+          "query": "url.original: *loop-size=${SIZE}*",
           "refId": "A",
           "timeField": "@timestamp"
         }
       ],
-      "title": "MENOR TEMPO -> MAIOR TEMPO | QTD EXECUÇÕES: ${SIZE}",
+      "title": "LESS -> GREATER TIME | EXECUTION SIZE: ${SIZE}",
       "transformations": [],
       "type": "barchart"
     },
@@ -156,7 +155,7 @@
       },
       "id": 12,
       "panels": [],
-      "title": "BROKER: ${BROKER} | QTD EXECUÇÕES: ${SIZE}",
+      "title": "BROKERS | EXECUTION SIZE: ${SIZE}",
       "type": "row"
     },
     {
@@ -233,8 +232,6 @@
         "xTickLabelSpacing": 0
       },
       "pluginVersion": "10.0.1",
-      "repeat": "BROKER",
-      "repeatDirection": "h",
       "targets": [
         {
           "alias": "",
@@ -263,12 +260,123 @@
               "type": "avg"
             }
           ],
-          "query": "/scheduler/send-data?loop-size=${SIZE}&message-broker-type=${BROKER}",
+          "query": "url.original: *JMS* AND url.original: *loop-size=${SIZE}*",
           "refId": "A",
           "timeField": "@timestamp"
         }
       ],
-      "title": "${BROKER}",
+      "title": "JMS",
+      "transformations": [],
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "d3739ef9-7307-4c63-9b1c-d8e2793b8adc"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "µs"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 10
+      },
+      "id": 38,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "colorByField": "Average",
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "10.0.1",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "url.original",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "asc",
+                "orderBy": "1",
+                "size": "0"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "d3739ef9-7307-4c63-9b1c-d8e2793b8adc"
+          },
+          "hide": false,
+          "metrics": [
+            {
+              "field": "transaction.duration.us",
+              "id": "1",
+              "type": "avg"
+            }
+          ],
+          "query": "url.original: *KAFKA* AND url.original: *loop-size=${SIZE}*",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "KAFKA",
       "transformations": [],
       "type": "barchart"
     },
@@ -282,7 +390,7 @@
       },
       "id": 7,
       "panels": [],
-      "title": "JMS - {FORMAT} | QTD EXECUÇÕES: ${SIZE}",
+      "title": "BROKER: ${BROKER} | {ALL FORMATS} | EXECUTION SIZE: ${SIZE}",
       "type": "row"
     },
     {
@@ -359,8 +467,6 @@
         "xTickLabelSpacing": 0
       },
       "pluginVersion": "10.0.1",
-      "repeat": "FORMAT",
-      "repeatDirection": "h",
       "targets": [
         {
           "alias": "",
@@ -389,27 +495,347 @@
               "type": "avg"
             }
           ],
-          "query": "\"/scheduler/send-data?loop-size=${SIZE}&message-broker-type=JMS&message-format-type=${FORMAT}\"",
+          "query": "url.original: *${BROKER}* AND url.original: *JSON* AND url.original: *loop-size=${SIZE}*",
           "refId": "A",
           "timeField": "@timestamp"
         }
       ],
-      "title": "${FORMAT}",
+      "title": "JSON",
       "transformations": [],
       "type": "barchart"
     },
     {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 38
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "d3739ef9-7307-4c63-9b1c-d8e2793b8adc"
       },
-      "id": 22,
-      "panels": [],
-      "title": "KAFKA - {FORMAT} | QTD EXECUÇÕES: ${SIZE}",
-      "type": "row"
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "µs"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 6,
+        "y": 20
+      },
+      "id": 39,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "colorByField": "Average",
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "10.0.1",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "url.original",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "asc",
+                "orderBy": "1",
+                "size": "0"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "d3739ef9-7307-4c63-9b1c-d8e2793b8adc"
+          },
+          "hide": false,
+          "metrics": [
+            {
+              "field": "transaction.duration.us",
+              "id": "1",
+              "type": "avg"
+            }
+          ],
+          "query": "url.original: *${BROKER}* AND url.original: *PROTOBUF* AND url.original: *loop-size=${SIZE}*",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "PROTOBUF",
+      "transformations": [],
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "d3739ef9-7307-4c63-9b1c-d8e2793b8adc"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "µs"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 12,
+        "y": 20
+      },
+      "id": 40,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "colorByField": "Average",
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "10.0.1",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "url.original",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "asc",
+                "orderBy": "1",
+                "size": "0"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "d3739ef9-7307-4c63-9b1c-d8e2793b8adc"
+          },
+          "hide": false,
+          "metrics": [
+            {
+              "field": "transaction.duration.us",
+              "id": "1",
+              "type": "avg"
+            }
+          ],
+          "query": "url.original: *${BROKER}* AND url.original: *PROTOSTUFF* AND url.original: *loop-size=${SIZE}*",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "PROTOSTUFF",
+      "transformations": [],
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "d3739ef9-7307-4c63-9b1c-d8e2793b8adc"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "µs"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 18,
+        "y": 20
+      },
+      "id": 41,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "colorByField": "Average",
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "10.0.1",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "url.original",
+              "id": "2",
+              "settings": {
+                "min_doc_count": "1",
+                "order": "asc",
+                "orderBy": "1",
+                "size": "0"
+              },
+              "type": "terms"
+            }
+          ],
+          "datasource": {
+            "type": "elasticsearch",
+            "uid": "d3739ef9-7307-4c63-9b1c-d8e2793b8adc"
+          },
+          "hide": false,
+          "metrics": [
+            {
+              "field": "transaction.duration.us",
+              "id": "1",
+              "type": "avg"
+            }
+          ],
+          "query": "url.original: *${BROKER}* AND url.original: *KRYO* AND url.original: *loop-size=${SIZE}*",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "KRYO",
+      "transformations": [],
+      "type": "barchart"
     },
     {
       "datasource": {
@@ -459,9 +885,9 @@
         "h": 9,
         "w": 6,
         "x": 0,
-        "y": 39
+        "y": 29
       },
-      "id": 27,
+      "id": 42,
       "options": {
         "barRadius": 0,
         "barWidth": 0.97,
@@ -485,7 +911,6 @@
         "xTickLabelSpacing": 0
       },
       "pluginVersion": "10.0.1",
-      "repeatDirection": "h",
       "targets": [
         {
           "alias": "",
@@ -496,7 +921,7 @@
               "settings": {
                 "min_doc_count": "1",
                 "order": "asc",
-                "orderBy": "_term",
+                "orderBy": "1",
                 "size": "0"
               },
               "type": "terms"
@@ -514,17 +939,17 @@
               "type": "avg"
             }
           ],
-          "query": "\"/scheduler/send-data?loop-size=${SIZE}&message-broker-type=KAFKA&message-format-type=${FORMAT}\"",
+          "query": "url.original: *${BROKER}* AND url.original: *MSGPACK* AND url.original: *loop-size=${SIZE}*",
           "refId": "A",
           "timeField": "@timestamp"
         }
       ],
-      "title": "${FORMAT}",
+      "title": "MSGPACK",
       "transformations": [],
       "type": "barchart"
     }
   ],
-  "refresh": "",
+  "refresh": false,
   "schemaVersion": 38,
   "style": "dark",
   "tags": [],
@@ -533,27 +958,22 @@
       {
         "current": {
           "selected": true,
-          "text": "All",
-          "value": "$__all"
+          "text": "KAFKA",
+          "value": "KAFKA"
         },
         "hide": 0,
-        "includeAll": true,
+        "includeAll": false,
         "label": "BROKER",
         "multi": false,
         "name": "BROKER",
         "options": [
-          {
-            "selected": true,
-            "text": "All",
-            "value": "$__all"
-          },
           {
             "selected": false,
             "text": "JMS",
             "value": "JMS"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "KAFKA",
             "value": "KAFKA"
           }
@@ -566,20 +986,15 @@
       {
         "current": {
           "selected": true,
-          "text": "All",
-          "value": "$__all"
+          "text": "KRYO",
+          "value": "KRYO"
         },
-        "hide": 0,
-        "includeAll": true,
+        "hide": 2,
+        "includeAll": false,
         "label": "FORMAT",
         "multi": false,
         "name": "FORMAT",
         "options": [
-          {
-            "selected": true,
-            "text": "All",
-            "value": "$__all"
-          },
           {
             "selected": false,
             "text": "JSON",
@@ -596,7 +1011,7 @@
             "value": "PROTOSTUFF"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "KRYO",
             "value": "KRYO"
           },
@@ -682,13 +1097,13 @@
     ]
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Consumidor Métricas",
   "uid": "b138992b-b831-4afe-9386-daabdc9b1a7a",
-  "version": 9,
+  "version": 1,
   "weekStart": ""
 }
