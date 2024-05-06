@@ -2,7 +2,7 @@ FROM eclipse-temurin:17-jdk-alpine
 
 VOLUME /tmp
 
-ARG DEPENDENCY=scheduler/target/dependency
+ARG DEPENDENCY=accounts/target/dependency
 COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY ${DEPENDENCY}/META-INF /app/META-INF
 COPY ${DEPENDENCY}/BOOT-INF/classes /app
