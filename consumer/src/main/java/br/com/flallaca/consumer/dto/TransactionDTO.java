@@ -2,7 +2,6 @@ package br.com.flallaca.consumer.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
-import org.msgpack.annotation.Message;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -15,7 +14,6 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Message
 public class TransactionDTO {
 
     @Size(min = 1, max = 100)

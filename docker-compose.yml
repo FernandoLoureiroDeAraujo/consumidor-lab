@@ -15,10 +15,10 @@ services:
     depends_on:
       - activemq
       - scheduler-instance1
-#      - consumer-instance1
-#      - accounts-instance1
-#      - accounts-instance2
-#      - processor-instance1
+      - consumer-instance1
+      - accounts-instance1
+      - accounts-instance2
+      - processor-instance1
 
   # JMS BROKER
   activemq:
@@ -31,42 +31,6 @@ services:
       - AMQ_PASSWORD=admin
     networks:
       - mynetwork
-
-  # KAFKA
-#  zookeeper:
-#    image: confluentinc/cp-zookeeper:7.3.2
-#    hostname: zookeeper
-#    container_name: zookeeper
-#    ports:
-#      - 2181:2181
-#    environment:
-#      ZOOKEEPER_CLIENT_PORT: 2181
-#      ZOOKEEPER_SERVER_ID: 1
-#      ZOOKEEPER_SERVERS: zookeeper:2888:3888
-#  kafka:
-#    image: confluentinc/cp-kafka:7.3.2
-#    hostname: kafka
-#    container_name: kafka
-#    ports:
-#      - 9092:9092
-#      - 29092:29092
-#      - 9999:9999
-#    environment:
-#      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:19092,EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092,DOCKER://host.docker.internal:29092
-#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,DOCKER:PLAINTEXT
-#      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-#      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
-#      KAFKA_BROKER_ID: 1
-#      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
-#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-#      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-#      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-#      KAFKA_JMX_PORT: 9999
-#      KAFKA_JMX_HOSTNAME: ${DOCKER_HOST_IP:-127.0.0.1}
-#      KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
-#      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
-#    depends_on:
-#      - zookeeper
   kafka:
     image: confluentinc/cp-kafka:6.0.14
     depends_on:
@@ -126,91 +90,91 @@ services:
     environment:
       - REQUEST_URL_CONSUMER=http://172.17.0.1:8080/accounts/transactions
       - OTEL_SERVICE_NAME=scheduler
-#  consumer-instance1:
-#    build:
-#      context: .
-#      dockerfile: consumer/Dockerfile
-#      args:
-#        - HOME=${HOME}
-##    volumes:
-##      - "${HOME}/.m2:/root/.m2"
-#    networks:
-#      - mynetwork
-#    depends_on:
-#      - activemq
+  consumer-instance1:
+    build:
+      context: .
+      dockerfile: consumer/Dockerfile
+      args:
+        - HOME=${HOME}
+#    volumes:
+#      - "${HOME}/.m2:/root/.m2"
+    networks:
+      - mynetwork
+    depends_on:
+      - activemq
+      - jaeger
+    expose:
+      - "8082:8082"
+    ports:
+      - "5002:5002"
+    env_file:
+      - docker/global-applications.env
+    environment:
+      - REQUEST_URL_ACCOUNTS=http://172.17.0.1:8080/accounts/transactions
+      - OTEL_SERVICE_NAME=consumer
+  accounts-instance1:
+    build:
+      context: .
+      dockerfile: accounts/Dockerfile
+      args:
+        - HOME=${HOME}
+#    volumes:
+#      - "${HOME}/.m2:/root/.m2"
+    networks:
+      - mynetwork
+    depends_on:
+      - activemq
 #      - jaeger
-#    expose:
-#      - "8082:8082"
-#    ports:
-#      - "5002:5002"
-#    env_file:
-#      - docker/global-applications.env
-#    environment:
-#      - REQUEST_URL_ACCOUNTS=http://172.17.0.1:8080/accounts/transactions
-#      - OTEL_SERVICE_NAME=consumer
-#  accounts-instance1:
-#    build:
-#      context: .
-#      dockerfile: accounts/Dockerfile
-#      args:
-#        - HOME=${HOME}
-##    volumes:
-##      - "${HOME}/.m2:/root/.m2"
-#    networks:
-#      - mynetwork
-#    depends_on:
-#      - activemq
-##      - jaeger
-#    expose:
-#      - "8083:8083"
-#    ports:
-#      - "5003:5002"
-#    env_file:
-#      - docker/global-applications.env
-#    environment:
-#      - OTEL_SERVICE_NAME=accounts-instance1
-#  accounts-instance2:
-#    build:
-#      context: .
-#      dockerfile: accounts/Dockerfile
-#      args:
-#        - HOME=${HOME}
-##    volumes:
-##      - "${HOME}/.m2:/root/.m2"
-#    networks:
-#      - mynetwork
-#    depends_on:
-#      - activemq
-#      - jaeger
-#    expose:
-#      - "8083:8083"
-#    ports:
-#      - "5004:5002"
-#    env_file:
-#      - docker/global-applications.env
-#    environment:
-#      - OTEL_SERVICE_NAME=accounts-instance2
-#  processor-instance1:
-#    build:
-#      context: .
-#      dockerfile: processor/Dockerfile
-#      args:
-#        - HOME=${HOME}
-##    volumes:
-##      - "${HOME}/.m2:/root/.m2"
-#    networks:
-#      - mynetwork
-#    depends_on:
-#      - activemq
-#      - jaeger
-#    expose:
-#      - "8084:8084"
-#    ports:
-#      - "5005:5002"
-#    env_file:
-#      - docker/global-applications.env
-#    environment:
-#      - OTEL_SERVICE_NAME=processor
+    expose:
+      - "8083:8083"
+    ports:
+      - "5003:5002"
+    env_file:
+      - docker/global-applications.env
+    environment:
+      - OTEL_SERVICE_NAME=accounts-instance1
+  accounts-instance2:
+    build:
+      context: .
+      dockerfile: accounts/Dockerfile
+      args:
+        - HOME=${HOME}
+#    volumes:
+#      - "${HOME}/.m2:/root/.m2"
+    networks:
+      - mynetwork
+    depends_on:
+      - activemq
+      - jaeger
+    expose:
+      - "8083:8083"
+    ports:
+      - "5004:5002"
+    env_file:
+      - docker/global-applications.env
+    environment:
+      - OTEL_SERVICE_NAME=accounts-instance2
+  processor-instance1:
+    build:
+      context: .
+      dockerfile: processor/Dockerfile
+      args:
+        - HOME=${HOME}
+#    volumes:
+#      - "${HOME}/.m2:/root/.m2"
+    networks:
+      - mynetwork
+    depends_on:
+      - activemq
+      - jaeger
+    expose:
+      - "8084:8084"
+    ports:
+      - "5005:5002"
+    env_file:
+      - docker/global-applications.env
+    environment:
+      - OTEL_SERVICE_NAME=processor
 
   # OBSERVABILITY
   jaeger:

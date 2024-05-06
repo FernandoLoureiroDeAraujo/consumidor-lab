@@ -72,8 +72,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.msgpack</groupId>
-			<artifactId>msgpack</artifactId>
-			<version>0.6.12</version>
+			<artifactId>msgpack-core</artifactId>
+			<version>0.9.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.msgpack</groupId>
+			<artifactId>jackson-dataformat-msgpack</artifactId>
+			<version>0.9.8</version>
 		</dependency>
 		<dependency>
 			<groupId>com.esotericsoftware</groupId>

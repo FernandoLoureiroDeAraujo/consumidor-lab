@@ -3,7 +3,6 @@ package br.com.flallaca.consumer.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.*;
-import org.msgpack.annotation.Message;
 
 import java.util.List;
 
@@ -17,7 +16,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Message
 public class ResponseSkeletonDTO {
 
     @JsonProperty("meta")

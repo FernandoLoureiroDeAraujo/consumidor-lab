@@ -9,6 +9,7 @@ datasources:
 
 - name: Elasticsearch
   type: elasticsearch
+  uid: d3739ef9-7307-4c63-9b1c-d8e2793b8adc
   access: proxy
   url: http://172.17.0.1:9200
   jsonData:
