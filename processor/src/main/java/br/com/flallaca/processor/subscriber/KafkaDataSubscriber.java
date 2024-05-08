@@ -4,8 +4,6 @@ import br.com.flallaca.processor.dto.ResponseSkeletonDTO;
 import br.com.flallaca.processor.enums.MessageFormatType;
 import br.com.flallaca.processor.proto.AccountTransaction;
 import br.com.flallaca.processor.service.ProcessorService;
-import jakarta.jms.BytesMessage;
-import jakarta.jms.JMSException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;

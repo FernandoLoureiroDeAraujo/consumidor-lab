@@ -1,7 +1,5 @@
 package br.com.flallaca.consumer.dto;
 
-import br.com.flallaca.consumer.enums.MessageBrokerType;
-import br.com.flallaca.consumer.enums.MessageFormatType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,5 @@
 package br.com.flallaca.scheduler.dto;
 
-import br.com.flallaca.scheduler.enums.MessageBrokerType;
-import br.com.flallaca.scheduler.enums.MessageFormatType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

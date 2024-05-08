@@ -3,11 +3,10 @@ package br.com.flallaca.consumer.queue.publisher;
 import br.com.flallaca.consumer.dto.ResponseSkeletonDTO;
 import br.com.flallaca.consumer.enums.MessageFormatType;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
 @Log4j2
