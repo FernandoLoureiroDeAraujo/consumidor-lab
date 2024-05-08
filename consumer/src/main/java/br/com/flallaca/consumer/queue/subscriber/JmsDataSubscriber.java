@@ -27,16 +27,16 @@ public class JmsDataSubscriber {
 
         log.info("Message received: {}", message);
 
-        long startTime = System.currentTimeMillis();
+        var startTime = System.currentTimeMillis();
 
         var messageBrokerType = (MessageBrokerType) MessageBrokerType.valueOf(message.getStringProperty("brokerType"));
         var messageFormatType = (MessageFormatType) MessageFormatType.valueOf(message.getStringProperty("formatType"));
 
-        consumerService.doConsumeWebflux(messageBrokerType, messageFormatType, getMessageBodyData(message));
+        consumerService.doConsumeWebflux(message.getJMSCorrelationID(), messageBrokerType, messageFormatType, getMessageBodyData(message));
 
-        long endTime = System.currentTimeMillis(); // Get current time after sleep
-        long elapsedMillis = endTime - startTime; // Calculate elapsed time in milliseconds
-        long elapsedSeconds = elapsedMillis / 1000; // Convert elapsed time to seconds
+        var endTime = System.currentTimeMillis(); // Get current time after sleep
+        var elapsedMillis = endTime - startTime; // Calculate elapsed time in milliseconds
+        var elapsedSeconds = elapsedMillis / 1000; // Convert elapsed time to seconds
 
         log.info("Elapsed time: " + elapsedSeconds + " seconds.");
     }

@@ -39,35 +39,23 @@ public class KafkaDataSubscriber {
     }
 
     private Object deserializer(MessageFormatType messageFormatType, Message<byte[]> message) {
-
-//            byte[] data = readBytesFromMessage(message);
-
-            var factory = MessageDeserializerFactory.createDeserializer(messageFormatType);
-            return factory.deserialize(message.getPayload());
-
+        var factory = MessageDeserializerFactory.createDeserializer(messageFormatType);
+        return factory.deserialize(message.getPayload());
     }
-
-//    private byte[] readBytesFromMessage(Message<byte[]> message) throws JMSException {
-//        var byteMessage = (BytesMessage) message;
-//        var byteData = new byte[(int) byteMessage.getBodyLength()];
-//        byteMessage.readBytes(byteData);
-//        return byteData;
-//    }
 
     private void executeProcessor(Message<byte[]> message, Consumer<Message<byte[]>> executeProcessor) {
 
-        long startTime = System.currentTimeMillis();
+        var startTime = System.currentTimeMillis();
 
-        // TODO GERAR HEADER COM CORRELATION
-//        log.info("Message received: {}", message.getJMSCorrelationID());
+        var correlationID = message.getHeaders().get("correlationID", String.class);
+        log.info("Message received: {}", correlationID);
 
         executeProcessor.accept(message);
 
-        long endTime = System.currentTimeMillis();
-        long elapsedMillis = endTime - startTime;
-        long elapsedSeconds = elapsedMillis / 1000;
+        var endTime = System.currentTimeMillis();
+        var elapsedMillis = endTime - startTime;
+        var elapsedSeconds = elapsedMillis / 1000;
 
         log.info("Elapsed time In Millis: {} \n Elapsed time In Seconds {}", elapsedMillis, elapsedSeconds);
     }
-
 }

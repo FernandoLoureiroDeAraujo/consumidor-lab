@@ -16,6 +16,7 @@ import reactor.core.scheduler.Schedulers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Log4j2
 @Service
@@ -35,10 +36,10 @@ public class ConsumerService {
 
     public void consumeWebflux(MessageBrokerType messageBrokerType, MessageFormatType messageFormatType, Integer loopSize) {
         var endpointsToExecute = getEndpointsToExecute(loopSize);
-        doConsumeWebflux(messageBrokerType, messageFormatType, endpointsToExecute);
+        doConsumeWebflux(UUID.randomUUID().toString(), messageBrokerType, messageFormatType, endpointsToExecute);
     }
 
-    public void doConsumeWebflux(MessageBrokerType messageBrokerType, MessageFormatType messageFormatType, List<String> urls) {
+    public void doConsumeWebflux(String correlationID, MessageBrokerType messageBrokerType, MessageFormatType messageFormatType, List<String> urls) {
 
         var webClient = WebClient.create();
 
@@ -54,7 +55,7 @@ public class ConsumerService {
                                 JmsDataPublisherToProcessor.sendMessage(processorQueue, messageFormatType, response);
                             }
                             if (MessageBrokerType.KAFKA.equals(messageBrokerType)) {
-                                kafkaDataPublisherToProcessor.sendMessage(processorQueue, messageFormatType, response);
+                                kafkaDataPublisherToProcessor.sendMessage(correlationID, processorQueue, messageFormatType, response);
                             }
                         })
                         .onErrorResume(error -> {
