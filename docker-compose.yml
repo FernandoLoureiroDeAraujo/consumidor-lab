@@ -69,6 +69,7 @@ services:
 
   # APPLICATIONS
   scheduler-instance1:
+    image: fernandoaraujo/scheduler:latest
     build:
       context: .
       dockerfile: scheduler/Dockerfile
@@ -91,6 +92,7 @@ services:
       - REQUEST_URL_CONSUMER=http://172.17.0.1:8080/accounts/transactions
       - OTEL_SERVICE_NAME=scheduler
   consumer-instance1:
+    image: fernandoaraujo/consumer:latest
     build:
       context: .
       dockerfile: consumer/Dockerfile
@@ -113,6 +115,7 @@ services:
       - REQUEST_URL_ACCOUNTS=http://172.17.0.1:8080/accounts/transactions
       - OTEL_SERVICE_NAME=consumer
   accounts-instance1:
+    image: fernandoaraujo/accounts:latest
     build:
       context: .
       dockerfile: accounts/Dockerfile
@@ -134,6 +137,7 @@ services:
     environment:
       - OTEL_SERVICE_NAME=accounts-instance1
   accounts-instance2:
+    image: fernandoaraujo/accounts:latest
     build:
       context: .
       dockerfile: accounts/Dockerfile
@@ -155,6 +159,7 @@ services:
     environment:
       - OTEL_SERVICE_NAME=accounts-instance2
   processor-instance1:
+    image: fernandoaraujo/processor:latest
     build:
       context: .
       dockerfile: processor/Dockerfile
