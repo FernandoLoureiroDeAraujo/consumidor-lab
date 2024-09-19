@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Terraform files
+*.tfstate
+*.tfstate.backup
+*.tfplan
+.terraform/
+crash.log
+*.tfvars
