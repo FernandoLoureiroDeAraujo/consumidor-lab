@@ -14,4 +14,4 @@ done
 
 # Subindo o Docker Compose
 echo "Subindo Docker Compose..."
-docker-compose up --no-deps --build --force-recreate
+# docker-compose up --no-deps --build --force-recreate

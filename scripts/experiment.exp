@@ -1,0 +1,86 @@
+Experiment comparation {
+
+    description "Comparação com diferentes brokers de mensagens e serializadores"
+
+    Research Hypotheses {
+        RH1 {responseTimeUtilization JMS_JSON = KAFKA_JSON description "Compara tempo de resposta entre JMS e KAFKA utilizando JSON"},
+        RH2 {responseTimeUtilization JMS_PROTOBUF = KAFKA_PROTOBUF description "Compara tempo de resposta entre JMS e KAFKA utilizando PROTOBUF"},
+        RH3 {responseTimeUtilization JMS_PROTOSTUFF = KAFKA_PROTOSTUFF description "Compara tempo de resposta entre JMS e KAFKA utilizando PROTOSTUFF"},
+        RH4 {responseTimeUtilization JMS_KRYO = KAFKA_KRYO description "Compara tempo de resposta entre JMS e KAFKA utilizando KRYO"},
+        RH5 {responseTimeUtilization JMS_MSGPACK = KAFKA_MSGPACK description "Compara tempo de resposta entre JMS e KAFKA utilizando MSGPACK"},
+
+        RH6 {transactionsPerSecondUtilization JMS_JSON = KAFKA_JSON description "Compara TPS entre JMS e KAFKA utilizando JSON"},
+        RH7 {transactionsPerSecondUtilization JMS_PROTOBUF = KAFKA_PROTOBUF description "Compara TPS entre JMS e KAFKA utilizando PROTOBUF"},
+        RH8 {transactionsPerSecondUtilization JMS_PROTOSTUFF = KAFKA_PROTOSTUFF description "Compara TPS entre JMS e KAFKA utilizando PROTOSTUFF"},
+        RH9 {transactionsPerSecondUtilization JMS_KRYO = KAFKA_KRYO description "Compara TPS entre JMS e KAFKA utilizando KRYO"},
+        RH10 {transactionsPerSecondUtilization JMS_MSGPACK = KAFKA_MSGPACK description "Compara TPS entre JMS e KAFKA utilizando MSGPACK"},
+
+        RH11 {memoryResourceUtilization JMS_JSON = KAFKA_JSON description "Compara quantidade de memória utilizada JMS e KAFKA utilizando JSON"},
+        RH12 {memoryResourceUtilization JMS_PROTOBUF = KAFKA_PROTOBUF description "Compara quantidade de memória utilizada JMS e KAFKA utilizando PROTOBUF"},
+        RH13 {memoryResourceUtilization JMS_PROTOSTUFF = KAFKA_PROTOSTUFF description "Compara quantidade de memória utilizada JMS e KAFKA utilizando PROTOSTUFF"},
+        RH14 {memoryResourceUtilization JMS_KRYO = KAFKA_KRYO description "Compara quantidade de memória utilizada JMS e KAFKA utilizando KRYO"},
+        RH15 {memoryResourceUtilization JMS_MSGPACK = KAFKA_MSGPACK description "Compara quantidade de memória utilizada JMS e KAFKA utilizando MSGPACK"},
+
+        RH16 {cpuResourceUtilization JMS_JSON = KAFKA_JSON description "Compara uso CPU utilizado JMS e KAFKA utilizando JSON"},
+        RH17 {cpuResourceUtilization JMS_PROTOBUF = KAFKA_PROTOBUF description "Compara uso CPU utilizado JMS e KAFKA utilizando PROTOBUF"},
+        RH18 {cpuResourceUtilization JMS_PROTOSTUFF = KAFKA_PROTOSTUFF description "Compara uso CPU utilizado JMS e KAFKA utilizando PROTOSTUFF"},
+        RH19 {cpuResourceUtilization JMS_KRYO = KAFKA_KRYO description "Compara uso CPU utilizado JMS e KAFKA utilizando KRYO"},
+        RH20 {cpuResourceUtilization JMS_MSGPACK = KAFKA_MSGPACK description "Compara uso CPU utilizado JMS e KAFKA utilizando MSGPACK"}
+    }
+
+    Experimental Design {
+        runs 1
+    }
+
+    Dependent Variables {
+        responseTimeUtilization { description "Tempo Resposta" scaleType Absolute unit "seconds" instrument responseTimeCommand },
+        transactionsPerSecondUtilization { description "Transações por Segundo (TPS)" scaleType Absolute unit "seconds" instrument transactionsPerSecondCommand },
+        memoryResourceUtilization { description "Utilização de Recursos: Memória" scaleType Absolute instrument memoryResourceUtilizationCommand },
+        cpuResourceUtilization { description "Utilização de Recursos: CPU" scaleType Absolute instrument cpuResourceUtilizationCommand }
+    }
+
+    Instruments {
+        responseTimeCommand {command  "sh /opt/dohko/job/responseTime.sh"  valueExpression "Response Time:"},
+        transactionsPerSecondCommand {command  "sh /opt/dohko/job/transactionsPerSecond.sh"  valueExpression "Transactions Per Second:"},
+        memoryResourceUtilizationCommand {command  "sh /opt/dohko/job/memoryResourceUtilization.sh"  valueExpression "Memory Usage:"},
+        cpuResourceUtilizationCommand {command  "sh /opt/dohko/job/cpuResourceUtilization.sh"  valueExpression "CPU Usage:"}
+    }
+
+    Factors {
+        fplatform { description "Optimization" scaleType Nominal}
+    }
+
+    Treatments {
+        JMS_JSON description "JMS+JSON" factor fplatform parameters {params "message-broker-type=JMS&message-format-type=JSON"} execution responseTimeExecution,
+        JMS_PROTOBUF description "JMS+PROTOBUF" factor fplatform parameters {params "message-broker-type=JMS&message-format-type=PROTOBUF"} execution responseTimeExecution,
+        JMS_PROTOSTUFF description "JMS+PROTOSTUFF" factor fplatform parameters {params "message-broker-type=JMS&message-format-type=PROTOSTUFF"} execution responseTimeExecution,
+        JMS_KRYO description "JMS+KRYO" factor fplatform parameters {params "message-broker-type=JMS&message-format-type=KRYO"} execution responseTimeExecution,
+        JMS_MSGPACK description "JMS+MSGPACK" factor fplatform parameters {params "message-broker-type=JMS&message-format-type=MSGPACK"} execution responseTimeExecution,
+
+        KAFKA_JSON description "KAFKA+JSON" factor fplatform parameters {params "message-broker-type=KAFKA&message-format-type=JSON"} execution responseTimeExecution,
+        KAFKA_PROTOBUF description "KAFKA+PROTOBUF" factor fplatform parameters {params "message-broker-type=KAFKA&message-format-type=PROTOBUF"} execution responseTimeExecution,
+        KAFKA_PROTOSTUFF description "KAFKA+PROTOSTUFF" factor fplatform parameters {params "message-broker-type=KAFKA&message-format-type=PROTOSTUFF"} execution responseTimeExecution,
+        KAFKA_KRYO description "KAFKA+KRYO" factor fplatform parameters {params "message-broker-type=KAFKA&message-format-type=KRYO"} execution responseTimeExecution,
+        KAFKA_MSGPACK description "KAFKA+MSGPACK" factor fplatform parameters {params "message-broker-type=KAFKA&message-format-type=MSGPACK"} execution responseTimeExecution
+    }
+
+    Objects {
+        description "Number of Executions" scaleType Logarithmic {
+            loopSize1 {description "Loop Size 1" value "1" parameters {size "1"}},
+            loopSize5 {description "Loop Size 5" value "5" parameters {size "5"}}
+        }
+    }
+
+    Executions {
+        responseTimeExecution {
+            //command "/bin/bash -c 'wget --method=GET http://ec2-52-67-11-23.sa-east-1.compute.amazonaws.com:8080/scheduler/send-data?loop-size=1&${treatment.parameter.params} -O - '"
+            command "cd /opt/dohko/job && sh execute.sh http://ec2-52-67-11-23.sa-east-1.compute.amazonaws.com:8080 ${object.parameter.size} '${treatment.parameter.params}' "
+        }
+    }
+
+    Infrastructure {
+        user{
+          username "vagrant"
+        }
+    }
+}

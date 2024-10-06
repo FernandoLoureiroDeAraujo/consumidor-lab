@@ -185,7 +185,7 @@ services:
   jaeger:
     networks:
       - mynetwork
-    image: jaegertracing/all-in-one:latest
+    image: jaegertracing/all-in-one:1.46
     volumes:
       - ./docker/observability/jaeger-ui.json:/etc/jaeger/jaeger-ui.json
     command: --query.ui-config /etc/jaeger/jaeger-ui.json
@@ -202,7 +202,7 @@ services:
   otel_collector:
     networks:
       - mynetwork
-    image: otel/opentelemetry-collector-contrib:latest
+    image: otel/opentelemetry-collector-contrib:0.72.0
     volumes:
       - ./docker/observability/otel-collector-config.yml:/etc/otelcol/otel-collector-config.yml
     command: --config /etc/otelcol/otel-collector-config.yml

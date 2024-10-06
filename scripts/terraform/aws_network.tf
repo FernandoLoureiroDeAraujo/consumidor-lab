@@ -49,7 +49,9 @@ resource "aws_subnet" "public" {
   availability_zone = element(data.aws_availability_zones.available.names, count.index)
   map_public_ip_on_launch = true
   tags = {
-    Name = "tf-arq-public-subnet-${count.index}"
+    Name                                        = "tf-arq-public-subnet-${count.index}"
+    "kubernetes.io/role/elb"                    = "1"
+    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
   }
 }
 
@@ -66,7 +68,9 @@ resource "aws_subnet" "private" {
   cidr_block        = "10.0.${count.index + 3}.0/24" # Subnet privada com 256 IPs
   availability_zone = element(data.aws_availability_zones.available.names, count.index)
   tags = {
-    Name = "tf-arq-private-subnet-${count.index}"
+    Name                                        = "tf-arq-private-subnet-${count.index}"
+    "kubernetes.io/role/internal-elb"           = "1"
+    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
   }
 }
 
