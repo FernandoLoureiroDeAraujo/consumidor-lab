@@ -57,10 +57,7 @@ resource "aws_instance" "ec2_instance" {
               # Define permissões apropriadas para os diretórios clonados
               chown -R ec2-user:ec2-user /home/ec2-user/consumidor-lab
 
-              # Ajusta trecho imagem docker errada no dsm-experiments
-              sed -i 's#command: /bin/bash -c "/usr/local/bin/docker-entrypoint.sh"#command: /bin/bash -c "/opt/dohko/job/run"#' /home/ec2-user/dsm-experiments/docker-compose.yml
-
-              # Inicia as aplicações                
+              # Inicia as aplicações
               docker-compose -f /home/ec2-user/consumidor-lab/consumer-compose.yml up -d
               docker-compose --env-file /home/ec2-user/consumidor-lab/expruna.env -f /home/ec2-user/consumidor-lab/expruna-compose.yml up -d
 

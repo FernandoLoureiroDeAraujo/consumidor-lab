@@ -1,12 +1,24 @@
 # Consumidor Lab
 
-# Solution Diagram
+# Diagrama de solução
 ![![Experimental Solution Diagram.png](API%2FExperimental%20Solution%20Diagram.png)](API/solution-diagram.png "SOLUTION-DIAGRAM")
 
-# Run all applications
-docker compose up --build
+# Formas de executar
+## 1 - Executar com docker compose
+docker-compose -f consumer-compose.yml up -d
+docker-compose --env-file expruna.env -f expruna-compose.yml up -d
 
-# Instalar compilador de Bond
+## 2- Executar na AWS
+Acesse a pasta "/scripts/terraform" e execute os comandos
+terraform init
+terraform plan
+terraform apply
+
+# Adicionais:
+## Caso deseje adicionar mais scripts, será necessario buildar o dockerfile "expruna-cexpl.dockerfile"
+docker build -t expruna_custom:1.0.0 -f scripts/expruna-cexpl.dockerfile .
+
+## Instalar compilador de Bond
 Instalação: Primeiro, você precisa instalar o pacote Bond. Você pode fazer isso usando o gerenciador de pacotes do Haskell, cabal ou stack. Aqui está um exemplo de como você pode instalar usando o cabal:
 cabal update
 cabal install bond
