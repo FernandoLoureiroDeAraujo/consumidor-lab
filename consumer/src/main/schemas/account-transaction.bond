@@ -1,0 +1,39 @@
+namespace br.com.flallaca.consumer.bond;
+
+struct TransactionAmount {
+    1: string amount;
+    2: string currency;
+}
+
+struct Transaction {
+    1: string transactionId;
+    2: string completedAuthorisedPaymentType;
+    3: string creditDebitType;
+    4: string transactionName;
+    5: string type;
+    6: TransactionAmount transactionAmount;
+    7: string transactionDate;
+    8: string partieCnpjCpf;
+    9: string partiePersonType;
+    10: string partieCompeCode;
+    11: string partieBranchCode;
+    12: string partieNumber;
+    13: string partieCheckDigit;
+}
+
+struct Links {
+    1: string self;
+    2: string first;
+    3: string prev;
+    4: string next;
+}
+
+struct Meta {
+    1: string requestDateTime;
+}
+
+struct ResponseSkeleton {
+    1: list<Transaction> data;
+    2: Links links;
+    3: Meta meta;
+}
