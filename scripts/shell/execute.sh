@@ -21,8 +21,8 @@ TRACE_FLAG="01"   # sampled
 TRACE_PARENT="$VERSION-$TRACE_ID-$PARENT_ID-$TRACE_FLAG"
 
 ############################## EXECUTA REQUEST
-ENDPOINT="/scheduler/send-data"
-URL="${HOST}${ENDPOINT}?loop-size=${SIZE}&${PARAMS}"
+ENDPOINT="scheduler/send-data"
+URL="${HOST}:8080/${ENDPOINT}?loop-size=${SIZE}&${PARAMS}"
 
 echo "$URL"
 echo "$TRACE_PARENT"
@@ -63,6 +63,7 @@ END_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 ############################## EXPORTA DATAS PARA CONSULTAR PELO PROMETHEUS
 cat <<EOF > vars.sh
+HOST='$HOST'
 TRACE_ID='$TRACE_ID'
 START_TIME='$START_TIME'
 END_TIME='$END_TIME'

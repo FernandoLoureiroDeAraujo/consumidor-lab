@@ -4,7 +4,7 @@
 
 source vars.sh
 
-url="http://ec2-52-67-11-23.sa-east-1.compute.amazonaws.com:16686/api/traces/$TRACE_ID"
+url="${HOST}:16686/api/traces/$TRACE_ID"
 
 trace_json=$(curl -s "$url")
 

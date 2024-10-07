@@ -50,8 +50,6 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
   tags = {
     Name                                        = "tf-arq-public-subnet-${count.index}"
-    "kubernetes.io/role/elb"                    = "1"
-    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
   }
 }
 
@@ -69,8 +67,6 @@ resource "aws_subnet" "private" {
   availability_zone = element(data.aws_availability_zones.available.names, count.index)
   tags = {
     Name                                        = "tf-arq-private-subnet-${count.index}"
-    "kubernetes.io/role/internal-elb"           = "1"
-    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
   }
 }
 

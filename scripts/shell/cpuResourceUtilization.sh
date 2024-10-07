@@ -2,7 +2,7 @@
 
 source vars.sh
 
-PROMETHEUS_URL="http://ec2-52-67-11-23.sa-east-1.compute.amazonaws.com:9090"
+PROMETHEUS_URL="${HOST}:9090"
 QUERY="avg_over_time(process_cpu_usage[1d])"
 STEP=1d
 

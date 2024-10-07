@@ -1,4 +1,4 @@
-# Consumidor Lab
+# Open Finance Consumer ExpRunA Lab
 
 # Diagrama de solução
 ![![Experimental Solution Diagram.png](API%2FExperimental%20Solution%20Diagram.png)](API/solution-diagram.png "SOLUTION-DIAGRAM")
