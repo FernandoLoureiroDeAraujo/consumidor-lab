@@ -9,23 +9,23 @@ Experiment comparation {
         RH4 {responseTimeUtilization JMS_KRYO = KAFKA_KRYO description "Compara tempo de resposta entre JMS e KAFKA utilizando KRYO"},
         RH5 {responseTimeUtilization JMS_MSGPACK = KAFKA_MSGPACK description "Compara tempo de resposta entre JMS e KAFKA utilizando MSGPACK"},
 
-        RH6 {transactionsPerSecondUtilization JMS_JSON = KAFKA_JSON description "Compara TPS entre JMS e KAFKA utilizando JSON"},
-        RH7 {transactionsPerSecondUtilization JMS_PROTOBUF = KAFKA_PROTOBUF description "Compara TPS entre JMS e KAFKA utilizando PROTOBUF"},
-        RH8 {transactionsPerSecondUtilization JMS_PROTOSTUFF = KAFKA_PROTOSTUFF description "Compara TPS entre JMS e KAFKA utilizando PROTOSTUFF"},
-        RH9 {transactionsPerSecondUtilization JMS_KRYO = KAFKA_KRYO description "Compara TPS entre JMS e KAFKA utilizando KRYO"},
-        RH10 {transactionsPerSecondUtilization JMS_MSGPACK = KAFKA_MSGPACK description "Compara TPS entre JMS e KAFKA utilizando MSGPACK"},
+        RH6 {tpsUtilization JMS_JSON = KAFKA_JSON description "Compara TPS entre JMS e KAFKA utilizando JSON"},
+        RH7 {tpsUtilization JMS_PROTOBUF = KAFKA_PROTOBUF description "Compara TPS entre JMS e KAFKA utilizando PROTOBUF"},
+        RH8 {tpsUtilization JMS_PROTOSTUFF = KAFKA_PROTOSTUFF description "Compara TPS entre JMS e KAFKA utilizando PROTOSTUFF"},
+        RH9 {tpsUtilization JMS_KRYO = KAFKA_KRYO description "Compara TPS entre JMS e KAFKA utilizando KRYO"},
+        RH10 {tpsUtilization JMS_MSGPACK = KAFKA_MSGPACK description "Compara TPS entre JMS e KAFKA utilizando MSGPACK"},
 
-        RH11 {memoryResourceUtilization JMS_JSON = KAFKA_JSON description "Compara quantidade de memória utilizada JMS e KAFKA utilizando JSON"},
-        RH12 {memoryResourceUtilization JMS_PROTOBUF = KAFKA_PROTOBUF description "Compara quantidade de memória utilizada JMS e KAFKA utilizando PROTOBUF"},
-        RH13 {memoryResourceUtilization JMS_PROTOSTUFF = KAFKA_PROTOSTUFF description "Compara quantidade de memória utilizada JMS e KAFKA utilizando PROTOSTUFF"},
-        RH14 {memoryResourceUtilization JMS_KRYO = KAFKA_KRYO description "Compara quantidade de memória utilizada JMS e KAFKA utilizando KRYO"},
-        RH15 {memoryResourceUtilization JMS_MSGPACK = KAFKA_MSGPACK description "Compara quantidade de memória utilizada JMS e KAFKA utilizando MSGPACK"},
+        RH11 {memoryUtilization JMS_JSON = KAFKA_JSON description "Compara quantidade de memória utilizada JMS e KAFKA utilizando JSON"},
+        RH12 {memoryUtilization JMS_PROTOBUF = KAFKA_PROTOBUF description "Compara quantidade de memória utilizada JMS e KAFKA utilizando PROTOBUF"},
+        RH13 {memoryUtilization JMS_PROTOSTUFF = KAFKA_PROTOSTUFF description "Compara quantidade de memória utilizada JMS e KAFKA utilizando PROTOSTUFF"},
+        RH14 {memoryUtilization JMS_KRYO = KAFKA_KRYO description "Compara quantidade de memória utilizada JMS e KAFKA utilizando KRYO"},
+        RH15 {memoryUtilization JMS_MSGPACK = KAFKA_MSGPACK description "Compara quantidade de memória utilizada JMS e KAFKA utilizando MSGPACK"},
 
-        RH16 {cpuResourceUtilization JMS_JSON = KAFKA_JSON description "Compara uso CPU utilizado JMS e KAFKA utilizando JSON"},
-        RH17 {cpuResourceUtilization JMS_PROTOBUF = KAFKA_PROTOBUF description "Compara uso CPU utilizado JMS e KAFKA utilizando PROTOBUF"},
-        RH18 {cpuResourceUtilization JMS_PROTOSTUFF = KAFKA_PROTOSTUFF description "Compara uso CPU utilizado JMS e KAFKA utilizando PROTOSTUFF"},
-        RH19 {cpuResourceUtilization JMS_KRYO = KAFKA_KRYO description "Compara uso CPU utilizado JMS e KAFKA utilizando KRYO"},
-        RH20 {cpuResourceUtilization JMS_MSGPACK = KAFKA_MSGPACK description "Compara uso CPU utilizado JMS e KAFKA utilizando MSGPACK"}
+        RH16 {cpuUtilization JMS_JSON = KAFKA_JSON description "Compara uso CPU utilizado JMS e KAFKA utilizando JSON"},
+        RH17 {cpuUtilization JMS_PROTOBUF = KAFKA_PROTOBUF description "Compara uso CPU utilizado JMS e KAFKA utilizando PROTOBUF"},
+        RH18 {cpuUtilization JMS_PROTOSTUFF = KAFKA_PROTOSTUFF description "Compara uso CPU utilizado JMS e KAFKA utilizando PROTOSTUFF"},
+        RH19 {cpuUtilization JMS_KRYO = KAFKA_KRYO description "Compara uso CPU utilizado JMS e KAFKA utilizando KRYO"},
+        RH20 {cpuUtilization JMS_MSGPACK = KAFKA_MSGPACK description "Compara uso CPU utilizado JMS e KAFKA utilizando MSGPACK"}
     }
 
     Experimental Design {
@@ -34,9 +34,9 @@ Experiment comparation {
 
     Dependent Variables {
         responseTimeUtilization { description "Tempo Resposta" scaleType Absolute unit "seconds" instrument responseTimeCommand },
-        transactionsPerSecondUtilization { description "Transações por Segundo (TPS)" scaleType Absolute unit "seconds" instrument transactionsPerSecondCommand },
-        memoryResourceUtilization { description "Utilização de Recursos: Memória" scaleType Absolute instrument memoryResourceUtilizationCommand },
-        cpuResourceUtilization { description "Utilização de Recursos: CPU" scaleType Absolute instrument cpuResourceUtilizationCommand }
+        tpsUtilization { description "Transações por Segundo (TPS)" scaleType Absolute unit "seconds" instrument transactionsPerSecondCommand },
+        memoryUtilization { description "Utilização de Recursos: Memória" scaleType Absolute instrument memoryResourceUtilizationCommand },
+        cpuUtilization { description "Utilização de Recursos: CPU" scaleType Absolute instrument cpuResourceUtilizationCommand }
     }
 
     Instruments {
