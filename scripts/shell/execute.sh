@@ -41,13 +41,6 @@ while true; do
 
   CURRENT_COUNT=$(echo "$JSON" | jq '[.data[]?.spans[]? | select(.operationName == "processor-queue send")] | length')
 
-    # Verificar se o jq conseguiu processar o JSON corretamente
-    if [ -z "$CURRENT_COUNT" ] || ! [[ "$CURRENT_COUNT" =~ ^[0-9]+$ ]]; then
-        echo "Erro ao processar o JSON ou contagem inválida. Tentando novamente..."
-        sleep 5
-        continue
-    fi
-
   echo "Ocorrências encontradas: $CURRENT_COUNT"
 
     if [ "$CURRENT_COUNT" -ge "$SIZE" ]; then
