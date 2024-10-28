@@ -3,6 +3,11 @@ provider "aws" {
   region = "sa-east-1"  # Altere para a região desejada
 }
 
+# Obter o IP público do computador automaticamente
+data "http" "public_ip" {
+  url = "http://ifconfig.me/ip"
+}
+
 # Criar uma VPC
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
@@ -91,7 +96,8 @@ resource "aws_security_group" "allow_all" {
     from_port   = 0
     to_port     = 65535
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["${chomp(data.http.public_ip.body)}/32"]
+#     cidr_blocks = ["0.0.0.0/0"] # Liberado para internet
   }
 
   # Pode sair para qualquer lugar

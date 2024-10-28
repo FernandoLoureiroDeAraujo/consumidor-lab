@@ -23,4 +23,4 @@ DURATION=$((LAST_START_TIME - FIRST_START_TIME))
 DURATION_SECONDS=$(echo "scale=6; $DURATION / 1000000" | bc)
 
 # Exibe o tempo total do trace em segundos
-echo "Response Time: $DURATION_SECONDS"
+echo "Response Time: ${DURATION_SECONDS}"

@@ -14,4 +14,4 @@ RESPONSE=$(curl -s -G \
   --data-urlencode "step=$STEP" \
   "$PROMETHEUS_URL/api/v1/query_range" | jq -r '.data.result[0].values[-1][1]')
 
-printf "Memory Usage:  %.2f\n" "$RESPONSE" # Em MB
+echo "Memory Usage: $RESPONSE" # Em MB

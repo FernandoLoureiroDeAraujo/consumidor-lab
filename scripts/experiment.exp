@@ -40,10 +40,10 @@ Experiment comparation {
     }
 
     Instruments {
-        responseTimeCommand {command  "sh /opt/dohko/job/responseTime.sh"  valueExpression "Response Time:"},
-        transactionsPerSecondCommand {command  "sh /opt/dohko/job/transactionsPerSecond.sh"  valueExpression "Transactions Per Second:"},
-        memoryResourceUtilizationCommand {command  "sh /opt/dohko/job/memoryResourceUtilization.sh"  valueExpression "Memory Usage:"},
-        cpuResourceUtilizationCommand {command  "sh /opt/dohko/job/cpuResourceUtilization.sh"  valueExpression "CPU Usage:"}
+        responseTimeCommand {command  "/root/.pyenv/versions/3.12.7/bin/python3 /opt/dohko/job/responseTime.py"  valueExpression "Response Time:"},
+        transactionsPerSecondCommand {command  "/root/.pyenv/versions/3.12.7/bin/python3 /opt/dohko/job/transactionsPerSecond.py"  valueExpression "Transactions Per Second:"},
+        memoryResourceUtilizationCommand {command  "/root/.pyenv/versions/3.12.7/bin/python3 /opt/dohko/job/memoryResourceUtilization.py"  valueExpression "Memory Usage:"},
+        cpuResourceUtilizationCommand {command  "/root/.pyenv/versions/3.12.7/bin/python3 /opt/dohko/job/cpuResourceUtilization.py"  valueExpression "CPU Usage:"}
     }
 
     Factors {

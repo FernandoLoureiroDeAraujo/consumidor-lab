@@ -19,7 +19,7 @@ resource "aws_instance" "ec2_instance" {
   key_name      = aws_key_pair.deployer.key_name
 
   tags = {
-    Name = "tf-arq-ec2-lab"
+    Name = "Instancia_Estudo"
   }
 
   # Adicionar um disco EBS
