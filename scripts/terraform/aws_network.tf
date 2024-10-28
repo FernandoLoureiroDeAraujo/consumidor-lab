@@ -5,7 +5,7 @@ provider "aws" {
 
 # Obter o IP público do computador automaticamente
 data "http" "public_ip" {
-  url = "http://ifconfig.me/ip"
+  url = "https://ipv4.icanhazip.com"
 }
 
 # Criar uma VPC
@@ -96,7 +96,9 @@ resource "aws_security_group" "allow_all" {
     from_port   = 0
     to_port     = 65535
     protocol    = "tcp"
-    cidr_blocks = ["${chomp(data.http.public_ip.body)}/32"]
+    cidr_blocks = [
+      "${chomp(data.http.public_ip.body)}/32",       # Libera o IP do computador
+    ]
 #     cidr_blocks = ["0.0.0.0/0"] # Liberado para internet
   }
 

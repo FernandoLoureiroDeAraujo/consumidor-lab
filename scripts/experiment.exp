@@ -73,7 +73,6 @@ Experiment comparation {
 
     Executions {
         responseTimeExecution {
-            //command "/bin/bash -c 'wget --method=GET http://ec2-52-67-11-23.sa-east-1.compute.amazonaws.com:8080/scheduler/send-data?loop-size=1&${treatment.parameter.params} -O - '"
             command "cd /opt/dohko/job && sh execute.sh http://ec2-52-67-11-23.sa-east-1.compute.amazonaws.com ${object.parameter.size} '${treatment.parameter.params}' "
         }
     }

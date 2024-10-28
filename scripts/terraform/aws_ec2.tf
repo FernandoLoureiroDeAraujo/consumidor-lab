@@ -64,6 +64,23 @@ resource "aws_instance" "ec2_instance" {
               EOF
 }
 
+
+# Regra adicional para permitir o IP da instância EC2
+resource "aws_security_group_rule" "allow_ec2_ip" {
+  type              = "ingress"
+  from_port         = 0
+  to_port           = 65535
+  protocol          = "tcp"
+  cidr_blocks = [
+    "${aws_instance.ec2_instance.private_ip}/32",  # Libera o IP privado da instância EC2
+    "${aws_instance.ec2_instance.public_ip}/32"    # Libera o IP publico da instância EC2
+  ]
+  security_group_id = aws_security_group.allow_all.id
+
+  # Garante que esta regra seja criada após a instância EC2
+  depends_on = [aws_instance.ec2_instance]
+}
+
 # Saída do IP público da instância
 output "instance_public_ip" {
   description = "O IP público da instância EC2"
