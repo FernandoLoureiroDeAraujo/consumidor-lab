@@ -3,33 +3,33 @@ Experiment comparation {
     description "Comparação com diferentes brokers de mensagens e serializadores"
 
     Research Hypotheses {
-        RH1 {responseTimeUtilization JMS_JSON = KAFKA_JSON description "Compara tempo de resposta entre JMS e KAFKA utilizando JSON"},
-        RH2 {responseTimeUtilization JMS_PROTOBUF = KAFKA_PROTOBUF description "Compara tempo de resposta entre JMS e KAFKA utilizando PROTOBUF"},
-        RH3 {responseTimeUtilization JMS_PROTOSTUFF = KAFKA_PROTOSTUFF description "Compara tempo de resposta entre JMS e KAFKA utilizando PROTOSTUFF"},
-        RH4 {responseTimeUtilization JMS_KRYO = KAFKA_KRYO description "Compara tempo de resposta entre JMS e KAFKA utilizando KRYO"},
-        RH5 {responseTimeUtilization JMS_MSGPACK = KAFKA_MSGPACK description "Compara tempo de resposta entre JMS e KAFKA utilizando MSGPACK"},
+        RH1 {responseTimeUtilization ACTIVEMQ_JSON = KAFKA_JSON description "Compara tempo de resposta entre ActiveMQ e KAFKA utilizando JSON"},
+        RH2 {responseTimeUtilization ACTIVEMQ_PROTOBUF = KAFKA_PROTOBUF description "Compara tempo de resposta entre ActiveMQ e KAFKA utilizando PROTOBUF"},
+        RH3 {responseTimeUtilization ACTIVEMQ_PROTOSTUFF = KAFKA_PROTOSTUFF description "Compara tempo de resposta entre ActiveMQ e KAFKA utilizando PROTOSTUFF"},
+        RH4 {responseTimeUtilization ACTIVEMQ_KRYO = KAFKA_KRYO description "Compara tempo de resposta entre ActiveMQ e KAFKA utilizando KRYO"},
+        RH5 {responseTimeUtilization ACTIVEMQ_MSGPACK = KAFKA_MSGPACK description "Compara tempo de resposta entre ActiveMQ e KAFKA utilizando MSGPACK"},
 
-        RH6 {tpsUtilization JMS_JSON = KAFKA_JSON description "Compara TPS entre JMS e KAFKA utilizando JSON"},
-        RH7 {tpsUtilization JMS_PROTOBUF = KAFKA_PROTOBUF description "Compara TPS entre JMS e KAFKA utilizando PROTOBUF"},
-        RH8 {tpsUtilization JMS_PROTOSTUFF = KAFKA_PROTOSTUFF description "Compara TPS entre JMS e KAFKA utilizando PROTOSTUFF"},
-        RH9 {tpsUtilization JMS_KRYO = KAFKA_KRYO description "Compara TPS entre JMS e KAFKA utilizando KRYO"},
-        RH10 {tpsUtilization JMS_MSGPACK = KAFKA_MSGPACK description "Compara TPS entre JMS e KAFKA utilizando MSGPACK"},
+        RH6 {tpsUtilization ACTIVEMQ_JSON = KAFKA_JSON description "Compara TPS entre ActiveMQ e KAFKA utilizando JSON"},
+        RH7 {tpsUtilization ACTIVEMQ_PROTOBUF = KAFKA_PROTOBUF description "Compara TPS entre ActiveMQ e KAFKA utilizando PROTOBUF"},
+        RH8 {tpsUtilization ACTIVEMQ_PROTOSTUFF = KAFKA_PROTOSTUFF description "Compara TPS entre ActiveMQ e KAFKA utilizando PROTOSTUFF"},
+        RH9 {tpsUtilization ACTIVEMQ_KRYO = KAFKA_KRYO description "Compara TPS entre ActiveMQ e KAFKA utilizando KRYO"},
+        RH10 {tpsUtilization ACTIVEMQ_MSGPACK = KAFKA_MSGPACK description "Compara TPS entre ActiveMQ e KAFKA utilizando MSGPACK"},
 
-        RH11 {memoryUtilization JMS_JSON = KAFKA_JSON description "Compara quantidade de memória utilizada JMS e KAFKA utilizando JSON"},
-        RH12 {memoryUtilization JMS_PROTOBUF = KAFKA_PROTOBUF description "Compara quantidade de memória utilizada JMS e KAFKA utilizando PROTOBUF"},
-        RH13 {memoryUtilization JMS_PROTOSTUFF = KAFKA_PROTOSTUFF description "Compara quantidade de memória utilizada JMS e KAFKA utilizando PROTOSTUFF"},
-        RH14 {memoryUtilization JMS_KRYO = KAFKA_KRYO description "Compara quantidade de memória utilizada JMS e KAFKA utilizando KRYO"},
-        RH15 {memoryUtilization JMS_MSGPACK = KAFKA_MSGPACK description "Compara quantidade de memória utilizada JMS e KAFKA utilizando MSGPACK"},
+        RH11 {memoryUtilization ACTIVEMQ_JSON = KAFKA_JSON description "Compara quantidade de memória utilizada ActiveMQ e KAFKA utilizando JSON"},
+        RH12 {memoryUtilization ACTIVEMQ_PROTOBUF = KAFKA_PROTOBUF description "Compara quantidade de memória utilizada ActiveMQ e KAFKA utilizando PROTOBUF"},
+        RH13 {memoryUtilization ACTIVEMQ_PROTOSTUFF = KAFKA_PROTOSTUFF description "Compara quantidade de memória utilizada ActiveMQ e KAFKA utilizando PROTOSTUFF"},
+        RH14 {memoryUtilization ACTIVEMQ_KRYO = KAFKA_KRYO description "Compara quantidade de memória utilizada ActiveMQ e KAFKA utilizando KRYO"},
+        RH15 {memoryUtilization ACTIVEMQ_MSGPACK = KAFKA_MSGPACK description "Compara quantidade de memória utilizada ActiveMQ e KAFKA utilizando MSGPACK"},
 
-        RH16 {cpuUtilization JMS_JSON = KAFKA_JSON description "Compara uso CPU utilizado JMS e KAFKA utilizando JSON"},
-        RH17 {cpuUtilization JMS_PROTOBUF = KAFKA_PROTOBUF description "Compara uso CPU utilizado JMS e KAFKA utilizando PROTOBUF"},
-        RH18 {cpuUtilization JMS_PROTOSTUFF = KAFKA_PROTOSTUFF description "Compara uso CPU utilizado JMS e KAFKA utilizando PROTOSTUFF"},
-        RH19 {cpuUtilization JMS_KRYO = KAFKA_KRYO description "Compara uso CPU utilizado JMS e KAFKA utilizando KRYO"},
-        RH20 {cpuUtilization JMS_MSGPACK = KAFKA_MSGPACK description "Compara uso CPU utilizado JMS e KAFKA utilizando MSGPACK"}
+        RH16 {cpuUtilization ACTIVEMQ_JSON = KAFKA_JSON description "Compara uso CPU utilizado ActiveMQ e KAFKA utilizando JSON"},
+        RH17 {cpuUtilization ACTIVEMQ_PROTOBUF = KAFKA_PROTOBUF description "Compara uso CPU utilizado ActiveMQ e KAFKA utilizando PROTOBUF"},
+        RH18 {cpuUtilization ACTIVEMQ_PROTOSTUFF = KAFKA_PROTOSTUFF description "Compara uso CPU utilizado ActiveMQ e KAFKA utilizando PROTOSTUFF"},
+        RH19 {cpuUtilization ACTIVEMQ_KRYO = KAFKA_KRYO description "Compara uso CPU utilizado ActiveMQ e KAFKA utilizando KRYO"},
+        RH20 {cpuUtilization ACTIVEMQ_MSGPACK = KAFKA_MSGPACK description "Compara uso CPU utilizado ActiveMQ e KAFKA utilizando MSGPACK"}
     }
 
     Experimental Design {
-        runs 1
+        runs 3
     }
 
     Dependent Variables {
@@ -51,11 +51,11 @@ Experiment comparation {
     }
 
     Treatments {
-        JMS_JSON description "JMS+JSON" factor fplatform parameters {params "message-broker-type=JMS&message-format-type=JSON"} execution responseTimeExecution,
-        JMS_PROTOBUF description "JMS+PROTOBUF" factor fplatform parameters {params "message-broker-type=JMS&message-format-type=PROTOBUF"} execution responseTimeExecution,
-        JMS_PROTOSTUFF description "JMS+PROTOSTUFF" factor fplatform parameters {params "message-broker-type=JMS&message-format-type=PROTOSTUFF"} execution responseTimeExecution,
-        JMS_KRYO description "JMS+KRYO" factor fplatform parameters {params "message-broker-type=JMS&message-format-type=KRYO"} execution responseTimeExecution,
-        JMS_MSGPACK description "JMS+MSGPACK" factor fplatform parameters {params "message-broker-type=JMS&message-format-type=MSGPACK"} execution responseTimeExecution,
+        ACTIVEMQ_JSON description "ActiveMQ+JSON" factor fplatform parameters {params "message-broker-type=ActiveMQ&message-format-type=JSON"} execution responseTimeExecution,
+        ACTIVEMQ_PROTOBUF description "ActiveMQ+PROTOBUF" factor fplatform parameters {params "message-broker-type=ActiveMQ&message-format-type=PROTOBUF"} execution responseTimeExecution,
+        ACTIVEMQ_PROTOSTUFF description "ActiveMQ+PROTOSTUFF" factor fplatform parameters {params "message-broker-type=ActiveMQ&message-format-type=PROTOSTUFF"} execution responseTimeExecution,
+        ACTIVEMQ_KRYO description "ActiveMQ+KRYO" factor fplatform parameters {params "message-broker-type=ActiveMQ&message-format-type=KRYO"} execution responseTimeExecution,
+        ACTIVEMQ_MSGPACK description "ActiveMQ+MSGPACK" factor fplatform parameters {params "message-broker-type=ActiveMQ&message-format-type=MSGPACK"} execution responseTimeExecution,
 
         KAFKA_JSON description "KAFKA+JSON" factor fplatform parameters {params "message-broker-type=KAFKA&message-format-type=JSON"} execution responseTimeExecution,
         KAFKA_PROTOBUF description "KAFKA+PROTOBUF" factor fplatform parameters {params "message-broker-type=KAFKA&message-format-type=PROTOBUF"} execution responseTimeExecution,
@@ -73,7 +73,7 @@ Experiment comparation {
 
     Executions {
         responseTimeExecution {
-            command "cd /opt/dohko/job && sh execute.sh http://ec2-52-67-11-23.sa-east-1.compute.amazonaws.com ${object.parameter.size} '${treatment.parameter.params}' "
+            command "cd /opt/dohko/job && sh request.sh http://ec2-52-67-11-23.sa-east-1.compute.amazonaws.com ${object.parameter.size} '${treatment.parameter.params}' "
         }
     }
 

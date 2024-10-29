@@ -18,6 +18,9 @@ services:
       - consumer-instance1
       - accounts-instance1
       - accounts-instance2
+      - accounts-instance3
+      - accounts-instance4
+      - accounts-instance5
       - processor-instance1
 
   # JMS BROKER
@@ -158,6 +161,72 @@ services:
       - docker/global-applications.env
     environment:
       - OTEL_SERVICE_NAME=accounts-instance2
+  accounts-instance3:
+    image: fernandoaraujo/accounts:latest
+    build:
+      context: .
+      dockerfile: accounts/Dockerfile
+      args:
+        - HOME=${HOME}
+    #    volumes:
+    #      - "${HOME}/.m2:/root/.m2"
+    networks:
+      - mynetwork
+    depends_on:
+      - activemq
+      - jaeger
+    expose:
+      - "8083:8083"
+    ports:
+      - "5005:5002"
+    env_file:
+      - docker/global-applications.env
+    environment:
+      - OTEL_SERVICE_NAME=accounts-instance3
+  accounts-instance4:
+    image: fernandoaraujo/accounts:latest
+    build:
+      context: .
+      dockerfile: accounts/Dockerfile
+      args:
+        - HOME=${HOME}
+    #    volumes:
+    #      - "${HOME}/.m2:/root/.m2"
+    networks:
+      - mynetwork
+    depends_on:
+      - activemq
+      - jaeger
+    expose:
+      - "8083:8083"
+    ports:
+      - "5006:5002"
+    env_file:
+      - docker/global-applications.env
+    environment:
+      - OTEL_SERVICE_NAME=accounts-instance4
+  accounts-instance5:
+    image: fernandoaraujo/accounts:latest
+    build:
+      context: .
+      dockerfile: accounts/Dockerfile
+      args:
+        - HOME=${HOME}
+    #    volumes:
+    #      - "${HOME}/.m2:/root/.m2"
+    networks:
+      - mynetwork
+    depends_on:
+      - activemq
+      - jaeger
+    expose:
+      - "8083:8083"
+    ports:
+      - "5007:5002"
+    env_file:
+      - docker/global-applications.env
+    environment:
+      - OTEL_SERVICE_NAME=accounts-instance5
   processor-instance1:
     image: fernandoaraujo/processor:latest
     build:

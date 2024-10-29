@@ -18,7 +18,7 @@ public class AccountsController {
     @GetMapping("/accounts/transactions")
     public ResponseEntity<ResponseSkeletonVO> transactions(@RequestParam(name = "page", defaultValue = "1", required = false) Integer page,
                                                            @RequestParam(name = "page-size", defaultValue = "25", required = false) Integer pageSize,
-                                                           @RequestParam(name = "skip-delay", defaultValue = "false", required = false) boolean skipDelay) {
+                                                           @RequestParam(name = "skip-delay", defaultValue = "true", required = false) boolean skipDelay) {
 
         log.info("Starting request");
 

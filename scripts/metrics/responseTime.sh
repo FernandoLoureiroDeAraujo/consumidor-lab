@@ -20,7 +20,9 @@ fi
 DURATION=$((LAST_START_TIME - FIRST_START_TIME))
 
 # Converte para segundos (1 microssegundo = 1e6 nanossegundos)
-DURATION_SECONDS=$(echo "scale=6; $DURATION / 1000000" | bc)
+RESPONSE_TIME=$(echo "scale=6; $DURATION / 1000000" | bc)
+
+export RESPONSE_TIME
 
 # Exibe o tempo total do trace em segundos
-echo "Response Time: ${DURATION_SECONDS}"
+echo "Response Time: ${RESPONSE_TIME}"

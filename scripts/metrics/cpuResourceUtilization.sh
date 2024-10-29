@@ -15,4 +15,6 @@ RESPONSE=$(curl -s -G \
 
 RESPONSE_MILLICORES=$(echo "$RESPONSE * 1000" | bc)
 
+export CPU_USAGE=$RESPONSE_MILLICORES
+
 printf "CPU Usage: %.3f\n" "$RESPONSE_MILLICORES"

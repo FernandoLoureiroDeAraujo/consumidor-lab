@@ -27,7 +27,9 @@ trace_duration=$((last_end_time - first_start_time))
 trace_duration_in_seconds=$(echo "scale=6; $trace_duration / 1000000" | bc)
 
 # Calcula a média de spans por segundo
-spans_per_second=$(echo "scale=6; $total_spans / $trace_duration_in_seconds" | bc)
+TPS=$(echo "scale=6; $total_spans / $trace_duration_in_seconds" | bc)
+
+export TPS
 
 # Exibe os resultados
-echo "Transactions Per Second: $spans_per_second"
+echo "Transactions Per Second: $TPS"

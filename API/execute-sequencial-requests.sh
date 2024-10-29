@@ -4,7 +4,7 @@
 base_url="http://localhost:8080/scheduler/send-data"
 
 # Lista de variações para message-broker-type e message-format-type
-message_brokers=("JMS")
+message_brokers=("JMS" "KAFKA")
 message_formats=("JSON" "PROTOBUF" "PROTOSTUFF" "KRYO" "MSGPACK")
 loop_size=25
 
