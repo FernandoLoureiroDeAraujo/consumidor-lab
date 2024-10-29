@@ -59,7 +59,7 @@ resource "aws_instance" "ec2_instance" {
 
               # Inicia as aplicações
               docker-compose -f /home/ec2-user/consumidor-lab/consumer-compose.yml up -d
-              docker-compose --env-file /home/ec2-user/consumidor-lab/expruna.env -f /home/ec2-user/consumidor-lab/expruna-compose.yml up -d
+              #docker-compose --env-file /home/ec2-user/consumidor-lab/expruna.env -f /home/ec2-user/consumidor-lab/expruna-compose.yml up -d
 
               EOF
 }

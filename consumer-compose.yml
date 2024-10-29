@@ -244,7 +244,7 @@ services:
     expose:
       - "8084:8084"
     ports:
-      - "5005:5002"
+      - "5008:5002"
     env_file:
       - docker/global-applications.env
     environment:
