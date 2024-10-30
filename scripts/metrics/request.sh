@@ -48,7 +48,7 @@ while true; do
         break
     else
         echo "Aguardando mais processamentos..."
-        sleep 5
+        sleep 2
     fi
 done
 

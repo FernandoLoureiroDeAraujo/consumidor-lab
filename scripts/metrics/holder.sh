@@ -19,7 +19,7 @@ for (( EXECUTION_NUMBER=1; EXECUTION_NUMBER<=EXECUTION_REPEAT; EXECUTION_NUMBER+
             PARAMS="message-broker-type=$BROKER&message-format-type=$SERIALIZER"
             sh request.sh $HOST $EXECUTION_VOLUME $PARAMS
 
-            sleep 5
+            sleep 2
 
             # EXECUTE METRICS
             source cpuResourceUtilization.sh

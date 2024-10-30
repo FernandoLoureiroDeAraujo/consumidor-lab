@@ -135,6 +135,7 @@ services:
       - "8083:8083"
     ports:
       - "5003:5002"
+    restart: always
     env_file:
       - docker/global-applications.env
     environment:
@@ -157,6 +158,7 @@ services:
       - "8083:8083"
     ports:
       - "5004:5002"
+    restart: always
     env_file:
       - docker/global-applications.env
     environment:
@@ -179,6 +181,7 @@ services:
       - "8083:8083"
     ports:
       - "5005:5002"
+    restart: always
     env_file:
       - docker/global-applications.env
     environment:
@@ -201,6 +204,7 @@ services:
       - "8083:8083"
     ports:
       - "5006:5002"
+    restart: always
     env_file:
       - docker/global-applications.env
     environment:
@@ -223,6 +227,7 @@ services:
       - "8083:8083"
     ports:
       - "5007:5002"
+    restart: always
     env_file:
       - docker/global-applications.env
     environment:

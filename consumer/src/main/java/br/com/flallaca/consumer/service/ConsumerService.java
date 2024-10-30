@@ -28,6 +28,12 @@ public class ConsumerService {
     @Value("${mq.processor-queue-name}")
     private String processorQueue;
 
+    @Value("${FLUX_LIMIT_RATE_HIGHTIDE:300}")
+    private Integer limitRateHighTide;
+
+    @Value("${FLUX_LIMIT_RATE_LOWTIDE:200}")
+    private Integer limitRateLowTide;
+
     @Autowired
     private JmsDataPublisherToProcessor JmsDataPublisherToProcessor;
 
@@ -45,6 +51,7 @@ public class ConsumerService {
 
         Flux.fromIterable(urls)
 //                .parallel()
+                .limitRate(limitRateHighTide, limitRateLowTide)
                 .subscribeOn(Schedulers.boundedElastic())
                 .flatMap(url -> webClient.get()
                         .uri(url)
