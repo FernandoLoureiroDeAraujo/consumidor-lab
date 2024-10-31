@@ -96,6 +96,11 @@ services:
       - OTEL_SERVICE_NAME=scheduler
   consumer-instance1:
     image: fernandoaraujo/consumer:latest
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
     build:
       context: .
       dockerfile: consumer/Dockerfile
@@ -119,6 +124,11 @@ services:
       - OTEL_SERVICE_NAME=consumer
   accounts-instance1:
     image: fernandoaraujo/accounts:latest
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
     build:
       context: .
       dockerfile: accounts/Dockerfile
@@ -142,6 +152,11 @@ services:
       - OTEL_SERVICE_NAME=accounts-instance1
   accounts-instance2:
     image: fernandoaraujo/accounts:latest
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
     build:
       context: .
       dockerfile: accounts/Dockerfile
@@ -165,6 +180,11 @@ services:
       - OTEL_SERVICE_NAME=accounts-instance2
   accounts-instance3:
     image: fernandoaraujo/accounts:latest
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
     build:
       context: .
       dockerfile: accounts/Dockerfile
@@ -188,6 +208,11 @@ services:
       - OTEL_SERVICE_NAME=accounts-instance3
   accounts-instance4:
     image: fernandoaraujo/accounts:latest
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
     build:
       context: .
       dockerfile: accounts/Dockerfile
@@ -209,29 +234,6 @@ services:
       - docker/global-applications.env
     environment:
       - OTEL_SERVICE_NAME=accounts-instance4
-  accounts-instance5:
-    image: fernandoaraujo/accounts:latest
-    build:
-      context: .
-      dockerfile: accounts/Dockerfile
-      args:
-        - HOME=${HOME}
-    #    volumes:
-    #      - "${HOME}/.m2:/root/.m2"
-    networks:
-      - mynetwork
-    depends_on:
-      - activemq
-      - jaeger
-    expose:
-      - "8083:8083"
-    ports:
-      - "5007:5002"
-    restart: always
-    env_file:
-      - docker/global-applications.env
-    environment:
-      - OTEL_SERVICE_NAME=accounts-instance5
   processor-instance1:
     image: fernandoaraujo/processor:latest
     build:
@@ -249,7 +251,7 @@ services:
     expose:
       - "8084:8084"
     ports:
-      - "5008:5002"
+      - "5007:5002"
     env_file:
       - docker/global-applications.env
     environment:
