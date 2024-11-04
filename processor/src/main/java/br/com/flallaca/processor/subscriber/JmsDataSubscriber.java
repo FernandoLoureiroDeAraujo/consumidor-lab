@@ -4,6 +4,9 @@ import br.com.flallaca.processor.dto.ResponseSkeletonDTO;
 import br.com.flallaca.processor.enums.MessageFormatType;
 import br.com.flallaca.processor.proto.AccountTransaction;
 import br.com.flallaca.processor.service.ProcessorService;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.*;
+import io.prometheus.client.exemplars.tracer.otel_agent.OpenTelemetryAgentSpanContextSupplier;
 import jakarta.jms.BytesMessage;
 import jakarta.jms.JMSException;
 import jakarta.jms.Message;
@@ -12,14 +15,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
 @Log4j2
 @Component
 public class JmsDataSubscriber {
 
+    private final AtomicLong timestamp = new AtomicLong();
+
     @Autowired
     private ProcessorService processorService;
+    @Autowired
+    private MeterRegistry registry;
 
 //    @JmsListener(destination = "${mq.processor-queue-name}", containerFactory = "defaultFactory", selector = "formatType = 'JSON'")
 //    public void receiveMessageWithFormatTypeJson(Message message) throws JMSException {
@@ -51,7 +61,7 @@ public class JmsDataSubscriber {
 
         var messageFormatType = MessageFormatType.valueOf(message.getStringProperty("formatType"));
 
-        // TODO MELHORAR ESSA LOGICA, ESTÁ HORRIVEL
+        // TODO MELHORAR ESSA LOGICA
         Consumer<Message> processorConsumer;
         if (MessageFormatType.PROTOBUF.equals(messageFormatType)) {
             processorConsumer = bytesMessage -> processorService.processor((AccountTransaction.ResponseSkeleton) deserializer(messageFormatType, bytesMessage));
@@ -60,6 +70,13 @@ public class JmsDataSubscriber {
         }
 
         executeProcessor(message, processorConsumer);
+
+        TimeGauge.builder("processor_last_execution_time_gauge", timestamp, TimeUnit.MILLISECONDS, AtomicLong::get)
+                 .strongReference(true)
+                 .tag("traceId", new OpenTelemetryAgentSpanContextSupplier().getTraceId())
+                 .register(registry);
+
+        timestamp.set(Instant.now().toEpochMilli());
     }
 
     private Object deserializer(MessageFormatType messageFormatType, Message message) {

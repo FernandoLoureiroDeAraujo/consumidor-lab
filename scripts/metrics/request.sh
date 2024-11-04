@@ -33,18 +33,19 @@ curl --location --request GET "${URL}" \
 
 ############################## ESPERA CONCLUIR REQUEST
 
-URL="${HOST}:16686/api/traces/$TRACE_ID"
-
 while true; do
 
-  JSON=$(curl -s "$URL")
+  PROMETHEUS_URL="${HOST}:9090"
+  QUERY="total_requests_total{traceId=\"$TRACE_ID\"}"
 
-  CURRENT_COUNT=$(echo "$JSON" | jq '[.data[]?.spans[]? | select(.operationName == "processor-queue send")] | length')
+  RESPONSE=$(curl -s -G \
+            --data-urlencode "query=$QUERY" \
+            "$PROMETHEUS_URL/api/v1/query" | jq -r '.data.result[0].value[1]')
 
-  echo "Ocorrências encontradas: $CURRENT_COUNT"
+  echo "Ocorrências encontradas: $RESPONSE"
 
-    if [ "$CURRENT_COUNT" -ge "$SIZE" ]; then
-        echo "Alvo de $TARGET_COUNT ocorrências atingido."
+    if [ -n "$RESPONSE" ] && [ "$RESPONSE" != "null" ] && [ "$RESPONSE" -ge "$SIZE" ]; then
+        echo "Alvo de $SIZE ocorrências atingido."
         break
     else
         echo "Aguardando mais processamentos..."
@@ -58,6 +59,7 @@ END_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 cat <<EOF > vars.sh
 HOST='$HOST'
 TRACE_ID='$TRACE_ID'
+SIZE='$SIZE'
 START_TIME='$START_TIME'
 END_TIME='$END_TIME'
 EOF

@@ -4,20 +4,30 @@ import br.com.flallaca.processor.dto.ResponseSkeletonDTO;
 import br.com.flallaca.processor.enums.MessageFormatType;
 import br.com.flallaca.processor.proto.AccountTransaction;
 import br.com.flallaca.processor.service.ProcessorService;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.*;
+import io.prometheus.client.exemplars.tracer.otel_agent.OpenTelemetryAgentSpanContextSupplier;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
 @Log4j2
 @Component
 public class KafkaDataSubscriber {
 
+    private final AtomicLong timestamp = new AtomicLong();
+
     @Autowired
     private ProcessorService processorService;
+    @Autowired
+    private MeterRegistry registry;
 
     @KafkaListener(topics = "${mq.processor-queue-name}", groupId = "processor-consumer-group")
     public void receiveMessage(Message<byte[]> message) {
@@ -34,6 +44,13 @@ public class KafkaDataSubscriber {
         }
 
         executeProcessor(message, processorConsumer);
+
+        TimeGauge.builder("processor_last_execution_time_gauge", timestamp, TimeUnit.MILLISECONDS, AtomicLong::get)
+                 .strongReference(true)
+                 .tag("traceId", new OpenTelemetryAgentSpanContextSupplier().getTraceId())
+                 .register(registry);
+
+        timestamp.set(Instant.now().toEpochMilli());
     }
 
     private Object deserializer(MessageFormatType messageFormatType, Message<byte[]> message) {

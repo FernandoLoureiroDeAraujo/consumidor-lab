@@ -5,6 +5,10 @@ import br.com.flallaca.consumer.enums.MessageBrokerType;
 import br.com.flallaca.consumer.enums.MessageFormatType;
 import br.com.flallaca.consumer.queue.publisher.JmsDataPublisherToProcessor;
 import br.com.flallaca.consumer.queue.publisher.KafkaDataPublisherToProcessor;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.prometheus.client.exemplars.tracer.common.SpanContextSupplier;
+import io.prometheus.client.exemplars.tracer.otel_agent.OpenTelemetryAgentSpanContextSupplier;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -40,6 +45,9 @@ public class ConsumerService {
     @Autowired
     private KafkaDataPublisherToProcessor kafkaDataPublisherToProcessor;
 
+    @Autowired
+    private MeterRegistry registry;
+
     public void consumeWebflux(MessageBrokerType messageBrokerType, MessageFormatType messageFormatType, Integer loopSize) {
         var endpointsToExecute = getEndpointsToExecute(loopSize);
         doConsumeWebflux(UUID.randomUUID().toString(), messageBrokerType, messageFormatType, endpointsToExecute);
@@ -57,6 +65,7 @@ public class ConsumerService {
                         .uri(url)
                         .retrieve()
                         .bodyToMono(ResponseSkeletonDTO.class)
+                        .timeout(Duration.ofSeconds(5))
                         .doOnNext(response -> {
                             if (MessageBrokerType.JMS.equals(messageBrokerType)) {
                                 JmsDataPublisherToProcessor.sendMessage(processorQueue, messageFormatType, response);
@@ -64,9 +73,17 @@ public class ConsumerService {
                             if (MessageBrokerType.KAFKA.equals(messageBrokerType)) {
                                 kafkaDataPublisherToProcessor.sendMessage(correlationID, processorQueue, messageFormatType, response);
                             }
+
+                            registry.counter("total_requests", "traceId", new OpenTelemetryAgentSpanContextSupplier().getTraceId()).increment();
+                            registry.counter("successful_requests", "traceId", new OpenTelemetryAgentSpanContextSupplier().getTraceId()).increment();
                         })
                         .onErrorResume(error -> {
+
                             log.error("Error calling " + url + ": " + error.getMessage());
+
+                            registry.counter("total_requests", "traceId", new OpenTelemetryAgentSpanContextSupplier().getTraceId()).increment();
+                            registry.counter("failed_requests", "traceId", new OpenTelemetryAgentSpanContextSupplier().getTraceId()).increment();
+
                             return Mono.empty();
                         })
                 ).blockLast();

@@ -47,6 +47,8 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_MESSAGE_MAX_BYTES: 52428800 # Define o tamanho máximo de uma mensagem para 50MB
+      KAFKA_REPLICA_FETCH_MAX_BYTES: 52428800 # Configura o limite para replicação
     networks:
       - mynetwork
   kafka-ui:
@@ -86,8 +88,6 @@ services:
 #      - jaeger
     expose:
       - "8081:8081"
-    ports:
-      - "5001:5002"
     env_file:
       - docker/global-applications.env
     environment:

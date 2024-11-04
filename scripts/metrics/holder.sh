@@ -6,7 +6,7 @@ EXECUTION_VOLUME="$2"
 EXECUTION_REPEAT="$3"
 
 # BROKERS + SERIALIZERS
-BROKERS=("JMS" "KAFKA")
+BROKERS=("KAFKA")
 SERIALIZERS=("JSON" "PROTOBUF" "PROTOSTUFF" "KRYO" "MSGPACK")
 
 for (( EXECUTION_NUMBER=1; EXECUTION_NUMBER<=EXECUTION_REPEAT; EXECUTION_NUMBER++ )); do
@@ -24,8 +24,7 @@ for (( EXECUTION_NUMBER=1; EXECUTION_NUMBER<=EXECUTION_REPEAT; EXECUTION_NUMBER+
             # EXECUTE METRICS
             source cpuResourceUtilization.sh
             source memoryResourceUtilization.sh
-            source responseTime.sh
-            source transactionsPerSecond.sh
+            source responseTimeAndTPSPrometheus.sh
 
             # GENERATE CSV
             METRICS_FILE="metrics.csv"
