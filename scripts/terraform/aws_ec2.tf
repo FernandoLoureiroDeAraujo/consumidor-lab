@@ -10,7 +10,7 @@ resource "aws_key_pair" "deployer" {
 # Criar uma Instância EC2
 resource "aws_instance" "ec2_instance" {
   ami           = "ami-079d43025fa6a0145"  # AMI do Amazon Linux 2, verifique a AMI mais recente na sua região
-  instance_type = "t3.xlarge"              # Tipo de instância
+  instance_type = "m5.2xlarge"              # Tipo de instância t3.xlarge
   subnet_id     = aws_subnet.public[0].id  # Subnet pública
 
   # Use vpc_security_group_ids em vez de security_groups
@@ -25,12 +25,23 @@ resource "aws_instance" "ec2_instance" {
   # Adicionar um disco EBS
   root_block_device {
     volume_type = "gp3"
-    volume_size = 32  # Tamanho do disco em GB
+    volume_size = 64  # Tamanho do disco em GB
   }
 
   # Instalação do Docker, Docker Compose e Git via script de provisionamento
   user_data = <<-EOF
               #!/bin/bash
+
+              # Cria um arquivo de swap de 32GB
+              fallocate -l 32G /swapfile
+              chmod 600 /swapfile
+              mkswap /swapfile
+              swapon /swapfile
+              echo '/swapfile swap swap defaults 0 0' >> /etc/fstab
+              # Ajusta a prioridade do swap
+              sysctl vm.swappiness=10
+              echo 'vm.swappiness=10' >> /etc/sysctl.conf
+
               # Atualiza o sistema
               yum update -y
               
