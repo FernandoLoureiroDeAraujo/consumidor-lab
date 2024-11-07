@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Log4j2
 @Service
@@ -26,21 +28,26 @@ public class SchedulerService {
     @Value("${mq.request-queue-name}")
     private String queueName;
 
-    public void processDatas(MessageBrokerType messageBrokerType, MessageFormatType messageFormatType, Integer loopSize) {
+    @Value("${batch.size:10000}")
+    private int batchSize;
 
-        var urls = getEndpointsToExecute(loopSize);
-        sendUrlsToBroker(messageBrokerType, messageFormatType, urls);
+    public void processDatas(MessageBrokerType messageBrokerType, MessageFormatType messageFormatType, Integer totalSize) {
+        IntStream.iterate(0, i -> i < totalSize, i -> i + batchSize)
+                 .forEach(start -> {
+                     int end = Math.min(start + batchSize, totalSize);
 
-        log.info("Datas process finished");
+                     log.info("Processing batch from " + start + " to " + (end - 1));
+
+                     var urls = getEndpointsToExecute(start, end);
+                     sendUrlsToBroker(messageBrokerType, messageFormatType, urls);
+                 });
     }
 
-    private List<String> getEndpointsToExecute(Integer loopSize) {
-
-        var hosts = new ArrayList<String>();
-
-        for (int x = 0; x < loopSize; x++) {
-            hosts.add(urlConsumer);
-        }
+    private List<String> getEndpointsToExecute(int start, int end) {
+        // Usa IntStream para gerar a lista diretamente
+        List<String> hosts = IntStream.range(start, end)
+                                      .mapToObj(i -> urlConsumer)
+                                      .collect(Collectors.toCollection(ArrayList::new));
 
         log.info("{} URLs recovered", hosts.size());
 

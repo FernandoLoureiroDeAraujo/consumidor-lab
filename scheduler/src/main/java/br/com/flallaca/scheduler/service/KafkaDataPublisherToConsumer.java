@@ -41,7 +41,7 @@ public class KafkaDataPublisherToConsumer {
 
         kafkaTemplate.send(kafkaMessage);
 
-        log.info("Sent to topic {} the message: {}", topicName, holder.getUrls());
+        log.info("Sent to topic {}", topicName);
     }
 
     private byte[] serializePayload(HolderMessageData holder) {

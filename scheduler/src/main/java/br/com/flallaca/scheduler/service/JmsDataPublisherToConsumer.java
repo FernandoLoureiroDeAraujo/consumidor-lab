@@ -32,6 +32,6 @@ public class JmsDataPublisherToConsumer {
 
         jmsTemplate.convertAndSend(queueName, urls, postProcessor);
 
-        log.info("Sent to queue {} the message: {}", queueName, urls);
+        log.info("Sent to queue {}", queueName);
     }
 }
