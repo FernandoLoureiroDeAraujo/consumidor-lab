@@ -6,7 +6,7 @@ EXECUTION_VOLUME="$2"
 EXECUTION_REPEAT="$3"
 
 # BROKERS + SERIALIZERS
-BROKERS=("KAFKA")
+BROKERS=("JMS" "KAFKA")
 SERIALIZERS=("JSON" "PROTOBUF" "PROTOSTUFF" "KRYO" "MSGPACK")
 
 for (( EXECUTION_NUMBER=1; EXECUTION_NUMBER<=EXECUTION_REPEAT; EXECUTION_NUMBER++ )); do
@@ -31,7 +31,7 @@ for (( EXECUTION_NUMBER=1; EXECUTION_NUMBER<=EXECUTION_REPEAT; EXECUTION_NUMBER+
 
             # CHECK FILE EXISTS
             if [ ! -f "$METRICS_FILE" ]; then
-                echo "Broker,Serializer,Execution ID,Execution Volume,CPU Usage,Memory Usage,Response Time,Transactions Per Second" > "$METRICS_FILE"
+                echo "Broker,Serializer,Execution ID,Execution Volume,CPU Usage,Memory Usage,Response Time In Seconds,Transactions Per Second" > "$METRICS_FILE"
             fi
 
             # ADD VALUES TO CSV
