@@ -68,6 +68,14 @@ resource "aws_instance" "ec2_instance" {
               # Define permissões apropriadas para os diretórios clonados
               chown -R ec2-user:ec2-user /home/ec2-user/consumidor-lab
 
+              # Prometheus Storage Config
+              mkdir /tmp/prometheus
+              chown 65534:65534 /tmp/prometheus
+
+              # Jaeger Storage Config
+              mkdir /tmp/badger
+              chown 65534:65534 /tmp/badger
+
               # Inicia as aplicações
               docker-compose -f /home/ec2-user/consumidor-lab/consumer-compose.yml up -d
               #docker-compose --env-file /home/ec2-user/consumidor-lab/expruna.env -f /home/ec2-user/consumidor-lab/expruna-compose.yml up -d

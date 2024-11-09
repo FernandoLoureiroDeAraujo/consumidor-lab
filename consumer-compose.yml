@@ -10,6 +10,7 @@ services:
     command: [ nginx-debug, '-g', 'daemon off;' ]
     ports:
       - "8080:80"
+    restart: always
     networks:
       - mynetwork
     depends_on:
@@ -28,6 +29,7 @@ services:
     ports:
       - 61616:61616
       - 8161:8161
+    restart: always
     environment:
       - AMQ_USER=admin
       - AMQ_PASSWORD=admin
@@ -40,6 +42,7 @@ services:
     ports:
       - '29092:29092'
       - '9092:9092'
+    restart: always
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
@@ -70,6 +73,7 @@ services:
     image: confluentinc/cp-zookeeper:6.0.14
     ports:
       - '2181:2181'
+    restart: always
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -93,6 +97,7 @@ services:
 #      - jaeger
     expose:
       - "8081:8081"
+    restart: always
     env_file:
       - docker/global-applications.env
     environment:
@@ -121,6 +126,7 @@ services:
       - "8082:8082"
     ports:
       - "5002:5002"
+    restart: always
     env_file:
       - docker/global-applications.env
     environment:
@@ -256,6 +262,7 @@ services:
       - "8084:8084"
     ports:
       - "5007:5002"
+    restart: always
     env_file:
       - docker/global-applications.env
     environment:
@@ -267,6 +274,7 @@ services:
       - mynetwork
     image: jaegertracing/all-in-one:1.46
     volumes:
+      - /tmp/badger:/badger
       - ./docker/observability/jaeger-ui.json:/etc/jaeger/jaeger-ui.json
     command: --query.ui-config /etc/jaeger/jaeger-ui.json
     environment:
@@ -276,6 +284,10 @@ services:
       - PROMETHEUS_QUERY_SUPPORT_SPANMETRICS_CONNECTOR=true
       - PROMETHEUS_QUERY_NAMESPACE=spanmetrics
       - PROMETHEUS_QUERY_DURATION_UNIT=s
+      - SPAN_STORAGE_TYPE=badger
+      - BADGER_EPHEMERAL=false
+      - BADGER_DIRECTORY_VALUE=/badger/data
+      - BADGER_DIRECTORY_KEY=/badger/key
     ports:
       - "16686:16686" # serve frontend
       - "14250:14250" # accept model.proto
@@ -291,6 +303,7 @@ services:
       - "8889:8889"   # Prometheus exporter metrics
       - "4317:4317"   # OTLP gRPC receiver
       - "4318:4318"   # OTLP http receiver
+    restart: always
     depends_on:
       - jaeger
   prometheus:
@@ -298,9 +311,11 @@ services:
       - mynetwork
     image: prom/prometheus:latest
     volumes:
+      - /tmp/prometheus:/prometheus
       - ./docker/observability/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
+    restart: always
     extra_hosts:
       - "host.docker.internal:host-gateway"
   grafana:
