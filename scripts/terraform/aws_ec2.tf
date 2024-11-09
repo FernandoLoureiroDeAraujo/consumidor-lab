@@ -25,7 +25,7 @@ resource "aws_instance" "ec2_instance" {
   # Adicionar um disco EBS
   root_block_device {
     volume_type = "gp3"
-    volume_size = 64  # Tamanho do disco em GB
+    volume_size = 128  # Tamanho do disco em GB
   }
 
   # Instalação do Docker, Docker Compose e Git via script de provisionamento

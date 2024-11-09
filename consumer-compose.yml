@@ -94,7 +94,6 @@ services:
       - mynetwork
     depends_on:
       - activemq
-#      - jaeger
     expose:
       - "8081:8081"
     restart: always
@@ -121,7 +120,6 @@ services:
       - mynetwork
     depends_on:
       - activemq
-      - jaeger
     expose:
       - "8082:8082"
     ports:
@@ -150,7 +148,6 @@ services:
       - mynetwork
     depends_on:
       - activemq
-#      - jaeger
     expose:
       - "8083:8083"
     ports:
@@ -178,7 +175,6 @@ services:
       - mynetwork
     depends_on:
       - activemq
-      - jaeger
     expose:
       - "8083:8083"
     ports:
@@ -206,7 +202,6 @@ services:
       - mynetwork
     depends_on:
       - activemq
-      - jaeger
     expose:
       - "8083:8083"
     ports:
@@ -234,7 +229,6 @@ services:
       - mynetwork
     depends_on:
       - activemq
-      - jaeger
     expose:
       - "8083:8083"
     ports:
@@ -257,7 +251,6 @@ services:
       - mynetwork
     depends_on:
       - activemq
-      - jaeger
     expose:
       - "8084:8084"
     ports:
@@ -269,43 +262,41 @@ services:
       - OTEL_SERVICE_NAME=processor
 
   # OBSERVABILITY
-  jaeger:
-    networks:
-      - mynetwork
-    image: jaegertracing/all-in-one:1.46
-    volumes:
-      - /tmp/badger:/badger
-      - ./docker/observability/jaeger-ui.json:/etc/jaeger/jaeger-ui.json
-    command: --query.ui-config /etc/jaeger/jaeger-ui.json
-    environment:
-      - LOG_LEVEL=info
-      - METRICS_STORAGE_TYPE=prometheus
-      - PROMETHEUS_SERVER_URL=http://prometheus:9090
-      - PROMETHEUS_QUERY_SUPPORT_SPANMETRICS_CONNECTOR=true
-      - PROMETHEUS_QUERY_NAMESPACE=spanmetrics
-      - PROMETHEUS_QUERY_DURATION_UNIT=s
-      - SPAN_STORAGE_TYPE=badger
-      - BADGER_EPHEMERAL=false
-      - BADGER_DIRECTORY_VALUE=/badger/data
-      - BADGER_DIRECTORY_KEY=/badger/key
-    ports:
-      - "16686:16686" # serve frontend
-      - "14250:14250" # accept model.proto
-  otel_collector:
-    networks:
-      - mynetwork
-    image: otel/opentelemetry-collector-contrib:0.72.0
-    volumes:
-      - ./docker/observability/otel-collector-config.yml:/etc/otelcol/otel-collector-config.yml
-    command: --config /etc/otelcol/otel-collector-config.yml
-    ports:
-      - "8888:8888"   # Prometheus metrics exposed by the collector
-      - "8889:8889"   # Prometheus exporter metrics
-      - "4317:4317"   # OTLP gRPC receiver
-      - "4318:4318"   # OTLP http receiver
-    restart: always
-    depends_on:
-      - jaeger
+#  jaeger:
+#    networks:
+#      - mynetwork
+#    image: jaegertracing/all-in-one:1.46
+#    volumes:
+#      - /tmp/badger:/badger
+#      - ./docker/observability/jaeger-ui.json:/etc/jaeger/jaeger-ui.json
+#    command: --query.ui-config /etc/jaeger/jaeger-ui.json
+#    environment:
+#      - LOG_LEVEL=info
+#      - METRICS_STORAGE_TYPE=prometheus
+#      - PROMETHEUS_SERVER_URL=http://prometheus:9090
+#      - PROMETHEUS_QUERY_SUPPORT_SPANMETRICS_CONNECTOR=true
+#      - PROMETHEUS_QUERY_NAMESPACE=spanmetrics
+#      - PROMETHEUS_QUERY_DURATION_UNIT=s
+#      - SPAN_STORAGE_TYPE=badger
+#      - BADGER_EPHEMERAL=false
+#      - BADGER_DIRECTORY_VALUE=/badger/data
+#      - BADGER_DIRECTORY_KEY=/badger/key
+#    ports:
+#      - "16686:16686" # serve frontend
+#      - "14250:14250" # accept model.proto
+#  otel_collector:
+#    networks:
+#      - mynetwork
+#    image: otel/opentelemetry-collector-contrib:0.72.0
+#    volumes:
+#      - ./docker/observability/otel-collector-config.yml:/etc/otelcol/otel-collector-config.yml
+#    command: --config /etc/otelcol/otel-collector-config.yml
+#    ports:
+#      - "8888:8888"   # Prometheus metrics exposed by the collector
+#      - "8889:8889"   # Prometheus exporter metrics
+#      - "4317:4317"   # OTLP gRPC receiver
+#      - "4318:4318"   # OTLP http receiver
+#    restart: always
   prometheus:
     networks:
       - mynetwork

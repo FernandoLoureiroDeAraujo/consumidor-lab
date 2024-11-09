@@ -16,6 +16,8 @@ scrape_configs:
                 'consumer-instance1:8082',
                 'accounts-instance1:8083',
                 'accounts-instance2:8083',
+                'accounts-instance3:8083',
+                'accounts-instance4:8083',
                 'processor-instance1:8084']
 
   - job_name: node_exporter
