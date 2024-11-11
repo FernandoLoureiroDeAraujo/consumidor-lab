@@ -83,6 +83,16 @@ services:
   # APPLICATIONS
   scheduler-instance1:
     image: fernandoaraujo/scheduler:latest
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
     build:
       context: .
       dockerfile: scheduler/Dockerfile
@@ -104,11 +114,16 @@ services:
       - OTEL_SERVICE_NAME=scheduler
   consumer-instance1:
     image: fernandoaraujo/consumer:latest
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"
     deploy:
       resources:
         limits:
           cpus: "1"
-          memory: "1024M"
+          memory: "4096M"
     build:
       context: .
       dockerfile: consumer/Dockerfile
@@ -132,6 +147,11 @@ services:
       - OTEL_SERVICE_NAME=consumer
   accounts-instance1:
     image: fernandoaraujo/accounts:latest
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"
     deploy:
       resources:
         limits:
@@ -159,6 +179,11 @@ services:
       - OTEL_SERVICE_NAME=accounts-instance1
   accounts-instance2:
     image: fernandoaraujo/accounts:latest
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"
     deploy:
       resources:
         limits:
@@ -186,6 +211,11 @@ services:
       - OTEL_SERVICE_NAME=accounts-instance2
   accounts-instance3:
     image: fernandoaraujo/accounts:latest
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"
     deploy:
       resources:
         limits:
@@ -213,6 +243,11 @@ services:
       - OTEL_SERVICE_NAME=accounts-instance3
   accounts-instance4:
     image: fernandoaraujo/accounts:latest
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"
     deploy:
       resources:
         limits:
@@ -240,6 +275,16 @@ services:
       - OTEL_SERVICE_NAME=accounts-instance4
   processor-instance1:
     image: fernandoaraujo/processor:latest
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1024M"
     build:
       context: .
       dockerfile: processor/Dockerfile

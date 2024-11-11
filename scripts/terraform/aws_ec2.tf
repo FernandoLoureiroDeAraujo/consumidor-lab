@@ -45,11 +45,8 @@ resource "aws_instance" "ec2_instance" {
               # Atualiza o sistema
               yum update -y
               
-              # Instala o Git
-              yum install git -y
-
-              # Instala o Maven
-              yum install maven -y
+              # Instala o JQ, Git e Maven
+              yum install jq git maven -y
 
               # Instala o Docker
               amazon-linux-extras install docker -y
