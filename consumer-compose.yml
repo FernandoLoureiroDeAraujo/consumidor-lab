@@ -26,6 +26,11 @@ services:
   # JMS BROKER
   activemq:
     image: quay.io/artemiscloud/activemq-artemis-broker:dev.latest
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"
     ports:
       - 61616:61616
       - 8161:8161
@@ -37,6 +42,11 @@ services:
       - mynetwork
   kafka:
     image: confluentinc/cp-kafka:6.0.14
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"
     depends_on:
       - zookeeper
     ports:
@@ -92,7 +102,6 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: "1024M"
     build:
       context: .
       dockerfile: scheduler/Dockerfile
@@ -110,6 +119,7 @@ services:
     env_file:
       - docker/global-applications.env
     environment:
+      - JAVA_OPTS=Xmx1G -Xms1G
       - REQUEST_URL_CONSUMER=http://172.17.0.1:8080/accounts/transactions
       - OTEL_SERVICE_NAME=scheduler
   consumer-instance1:
@@ -119,11 +129,6 @@ services:
       options:
         max-size: "100m"
         max-file: "1"
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: "4096M"
     build:
       context: .
       dockerfile: consumer/Dockerfile
@@ -143,6 +148,7 @@ services:
     env_file:
       - docker/global-applications.env
     environment:
+      - JAVA_OPTS=Xmx4G -Xms4G
       - REQUEST_URL_ACCOUNTS=http://172.17.0.1:8080/accounts/transactions
       - OTEL_SERVICE_NAME=consumer
   accounts-instance1:
@@ -156,7 +162,6 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: "1024M"
     build:
       context: .
       dockerfile: accounts/Dockerfile
@@ -176,6 +181,7 @@ services:
     env_file:
       - docker/global-applications.env
     environment:
+      - JAVA_OPTS=Xmx1G -Xms1G
       - OTEL_SERVICE_NAME=accounts-instance1
   accounts-instance2:
     image: fernandoaraujo/accounts:latest
@@ -188,7 +194,6 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: "1024M"
     build:
       context: .
       dockerfile: accounts/Dockerfile
@@ -208,6 +213,7 @@ services:
     env_file:
       - docker/global-applications.env
     environment:
+      - JAVA_OPTS=Xmx1G -Xms1G
       - OTEL_SERVICE_NAME=accounts-instance2
   accounts-instance3:
     image: fernandoaraujo/accounts:latest
@@ -220,7 +226,6 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: "1024M"
     build:
       context: .
       dockerfile: accounts/Dockerfile
@@ -240,6 +245,7 @@ services:
     env_file:
       - docker/global-applications.env
     environment:
+      - JAVA_OPTS=Xmx1G -Xms1G
       - OTEL_SERVICE_NAME=accounts-instance3
   accounts-instance4:
     image: fernandoaraujo/accounts:latest
@@ -252,7 +258,6 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: "1024M"
     build:
       context: .
       dockerfile: accounts/Dockerfile
@@ -272,6 +277,7 @@ services:
     env_file:
       - docker/global-applications.env
     environment:
+      - JAVA_OPTS=Xmx1G -Xms1G
       - OTEL_SERVICE_NAME=accounts-instance4
   processor-instance1:
     image: fernandoaraujo/processor:latest
@@ -284,7 +290,6 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: "1024M"
     build:
       context: .
       dockerfile: processor/Dockerfile
@@ -304,6 +309,7 @@ services:
     env_file:
       - docker/global-applications.env
     environment:
+      - JAVA_OPTS=Xmx2G -Xms2G
       - OTEL_SERVICE_NAME=processor
 
   # OBSERVABILITY
@@ -343,9 +349,12 @@ services:
 #      - "4318:4318"   # OTLP http receiver
 #    restart: always
   prometheus:
-    networks:
-      - mynetwork
     image: prom/prometheus:latest
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"
     volumes:
       - /tmp/prometheus:/prometheus
       - ./docker/observability/prometheus.yml:/etc/prometheus/prometheus.yml
@@ -354,9 +363,9 @@ services:
     restart: always
     extra_hosts:
       - "host.docker.internal:host-gateway"
-  grafana:
     networks:
       - mynetwork
+  grafana:
     image: grafana/grafana:10.0.1
     volumes:
       - ./docker/observability/grafana/grafana.ini:/etc/grafana/grafana.ini
@@ -369,6 +378,8 @@ services:
       - GF_AUTH_DISABLE_LOGIN_FORM=true
     ports:
       - "3000:3000"
+    networks:
+      - mynetwork
   node_exporter:
     image: quay.io/prometheus/node-exporter:v1.8.0
     container_name: node_exporter
