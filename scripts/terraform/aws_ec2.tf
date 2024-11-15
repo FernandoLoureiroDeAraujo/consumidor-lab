@@ -25,7 +25,7 @@ resource "aws_instance" "ec2_instance" {
   # Adicionar um disco EBS
   root_block_device {
     volume_type = "gp3"
-    volume_size = 128  # Tamanho do disco em GB
+    volume_size = 1024  # 1TB Tamanho do disco em GB
   }
 
   # Instalação do Docker, Docker Compose e Git via script de provisionamento
@@ -50,6 +50,19 @@ resource "aws_instance" "ec2_instance" {
 
               # Instala o Docker
               amazon-linux-extras install docker -y
+
+              # Configura a rotação de logs do Docker
+              cat <<EOL > /etc/docker/daemon.json
+              {
+                "log-driver": "json-file",
+                "log-opts": {
+                  "max-size": "100m",
+                  "max-file": "3"
+                }
+              }
+              EOL
+
+              # Inicia o Docker
               service docker start
               usermod -a -G docker ec2-user
               
